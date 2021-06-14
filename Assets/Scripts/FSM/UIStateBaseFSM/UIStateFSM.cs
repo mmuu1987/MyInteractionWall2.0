@@ -36,17 +36,23 @@ public class UIStateFSM : FsmState<UIControl>
 
         if (Parent != null)
         {
-            _videoImage = Parent.parent.transform.Find("VideoPlay").GetComponent<RawImage>();
+            Transform videoPlay = Parent.parent.transform.Find("VideoPlay");
 
-            _videoPlayer = _videoImage.GetComponent<VideoPlayer>();
+            if (videoPlay != null)
+            {
+                _videoImage = videoPlay.GetComponent<RawImage>();
 
-            RenderTexture rt = new RenderTexture(1280, 720, 0);
+                _videoPlayer = _videoImage.GetComponent<VideoPlayer>();
 
-            _videoPlayer.renderMode = VideoRenderMode.RenderTexture;
+                RenderTexture rt = new RenderTexture(1280, 720, 0);
 
-            _videoPlayer.targetTexture = rt;
+                _videoPlayer.renderMode = VideoRenderMode.RenderTexture;
 
-            _videoImage.texture = rt;
+                _videoPlayer.targetTexture = rt;
+
+                _videoImage.texture = rt;
+            }
+          
         }
        
     }
@@ -62,7 +68,8 @@ public class UIStateFSM : FsmState<UIControl>
         if (Parent != null)
         {
             Parent.gameObject.SetActive(true);
-            _videoImage.rectTransform.localScale = Vector3.zero;
+            if(_videoImage!=null)
+             _videoImage.rectTransform.localScale = Vector3.zero;
         }
 
        

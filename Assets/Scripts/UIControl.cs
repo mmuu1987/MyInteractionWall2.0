@@ -25,7 +25,11 @@ public enum UIState
     /// <summary>
     /// 卓越风采
     /// </summary>
-    OutstandingStyle
+    OutstandingStyle,
+
+    ZhongXinXieTong,
+
+    DaShiJi
 }
 /// <summary>
 /// 大屏互动UI控制器
@@ -50,8 +54,14 @@ public class UIControl : MonoBehaviour
     /// 私享传家按钮
     /// </summary>
     public Button PrivateHeirsBtn;
-
+    /// <summary>
+    /// 卓越风采
+    /// </summary>
     public Button OutstandingStyleBtn;
+
+    public Button ZhonXinXeiTongBtn;
+
+    public Button DaShiJianBtn;
 
     public Button Btn2000_2009;
 
@@ -74,6 +84,12 @@ public class UIControl : MonoBehaviour
     public Sprite HonorWallBtnLeft;
     public Sprite HonorWallBtnRight;
 
+    public GameObject LogoGameObject;
+
+    public GameObject GridPrefab;
+
+    public Transform GridParent;
+
     private void Awake()
     {
 
@@ -87,12 +103,26 @@ public class UIControl : MonoBehaviour
 
         _Machine = new UIStateMachine(this);
 
+        DicUI.Add(UIState.DaShiJi, new DaShiJianFSM(this.transform.Find("DaShiJiFSM"), GridPrefab, GridParent));
+        DicUI.Add(UIState.ZhongXinXieTong, new ZhongXinXieTongFSM(this.transform.Find("ZhongXinXieTongFSM"), LogoGameObject));
         DicUI.Add(UIState.CompanyIntroduction, new CompanyIntroductionFSM(this.transform.Find("CompanyIntroduction/CompanyIntroduction")));
         DicUI.Add(UIState.PrivateHeirs, new PrivateHeirsFSM(this.transform.Find("CompanyIntroduction/PrivateHeirs")));
         DicUI.Add(UIState.OutstandingStyle, new OutstandingStyleFSM(this.transform.Find("CompanyIntroduction/OutstandingStyle")));
         DicUI.Add(UIState.Close, new CloseFSM(null));
 
         _Machine.SetCurrentState(DicUI[UIState.Close]);
+
+
+
+        DaShiJianBtn.onClick.AddListener((() =>
+        {
+            _Machine.ChangeState(DicUI[UIState.DaShiJi]);
+        }));
+
+        ZhonXinXeiTongBtn.onClick.AddListener((() =>
+        {
+            _Machine.ChangeState(DicUI[UIState.ZhongXinXieTong]);
+        }));
 
         CompanyIntroductionBtn.onClick.AddListener((() =>
         {

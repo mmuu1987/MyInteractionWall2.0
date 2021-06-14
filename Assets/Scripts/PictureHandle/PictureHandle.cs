@@ -43,7 +43,9 @@ public class PictureHandle : MonoBehaviour
 
     private List<YearsInfo> _thirdYearInfos = new List<YearsInfo>(); 
 
-    public List<Texture2D> Texs = new List<Texture2D>();
+    public List<YearsEvent> YearsEvents = new List<YearsEvent>();
+
+    //public List<Texture2D> Texs = new List<Texture2D>();
 
 
     private List<int> _index1;
@@ -712,7 +714,7 @@ public class PictureHandle : MonoBehaviour
 
                     tex.Apply();
 
-                    Texs.Add(tex);
+                    //Texs.Add(tex);
 
                     //yearsEvent.PictureIndes.Add(pictureIndex);
 
@@ -742,7 +744,7 @@ public class PictureHandle : MonoBehaviour
 
                             tex.Apply();
 
-                            Texs.Add(tex);
+                            //Texs.Add(tex);
 
                             //yearsEvent.PictureIndes.Add(pictureIndex);
 
@@ -761,71 +763,14 @@ public class PictureHandle : MonoBehaviour
    
     public List<int> LoadTextureAssets( List<YearsInfo> yearInfos)
     {
-        //先默认为512*512的图片,原始图片的长宽我们在用另外的vector2保存
-        //生成需要表现的图片
+        
         List<int> temps = new List<int>();
        
         foreach (YearsInfo yesrsInfo in yearInfos)
         {
             foreach (YearsEvent yearsEvent in yesrsInfo.yearsEvents)
             {
-                if (yearsEvent.PicturesPath.Count <= 0)//如果没有图片，我们生成一个logo的先填充
-                {
-                    string s = Application.streamingAssetsPath + "/logo.png";
-
-                    Vector2 vector2;
-
-                    byte[] bytes = Common.MakeThumNail(s, Common.PictureWidth, Common.PictureHeight, "HW", out vector2);
-
-                    Texture2D tex = new Texture2D(Common.PictureWidth, Common.PictureHeight, TextureFormat.DXT1, false);
-
-                    tex.LoadImage(bytes);
-
-                    tex.Compress(true);
-
-                    tex.Apply();
-
-                    Texs.Add(tex);
-
-                   // yearsEvent.PictureIndes.Add(_pictureIndex);
-                    temps.Add(_pictureIndex);
-                    yearsEvent.AddPictureInfo(_pictureIndex, vector2);
-
-                    _pictureIndex++;
-                }
-                else
-                    foreach (string s in yearsEvent.PicturesPath)
-                    {
-
-                        if (File.Exists(s))
-                        {
-
-                            Vector2 vector2;
-
-                            FileInfo fileInfo = new FileInfo(s);
-
-                            //byte[] bytes = HandlePicture(yearsEvent.Years, fileInfo.DirectoryName, fileInfo.Name, out vector2);
-
-                            byte[] bytes = File.ReadAllBytes(fileInfo.FullName);
-
-                            Texture2D tex = new Texture2D(Common.PictureWidth, Common.PictureHeight, TextureFormat.DXT1, false);
-
-                            tex.LoadImage(bytes);
-
-                            tex.Compress(true);
-
-                            tex.Apply();
-
-                            Texs.Add(tex);
-
-                          //  yearsEvent.PictureIndes.Add(_pictureIndex);
-                            temps.Add(_pictureIndex);
-                            yearsEvent.AddPictureInfo(_pictureIndex, Vector2.zero);
-
-                            _pictureIndex++;
-                        }
-
-                    }
+                YearsEvents.Add(yearsEvent);
             }
         }
         return temps;
@@ -1032,12 +977,12 @@ public class PictureHandle : MonoBehaviour
     }  
     public void DestroyTexture()
     {
-        foreach (Texture2D texture2D in Texs)
-        {
-            Destroy(texture2D);
-        }
-        Texs.Clear();
-        Texs = null;
+        //foreach (Texture2D texture2D in Texs)
+        //{
+        //    Destroy(texture2D);
+        //}
+        //Texs.Clear();
+        //Texs = null;
         Resources.UnloadUnusedAssets();
     }
 

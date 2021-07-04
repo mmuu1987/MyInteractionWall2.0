@@ -41,6 +41,21 @@ public static class Common
     /// </summary>
     public static Int64 PictureIndex;
 
+
+    /// <summary>
+    /// 容纳图片，图片能在摄像机的范围的宽
+    /// </summary>
+    public static float ContainerWidth = 7680f;
+
+    /// <summary>
+    /// 容纳图片的缩放倍数
+    /// </summary>
+    public static float Scale = 2f;
+    /// <summary>
+    /// 容纳的图片，图片能在摄像机的范围的高
+    /// </summary>
+    public static float ContainerHeight = 1500;
+
     public static float GetCross(Vector2 p1, Vector2 p2, Vector2 p)
     {
         return (p2.x - p1.x) * (p.y - p1.y) - (p.x - p1.x) * (p2.y - p1.y);

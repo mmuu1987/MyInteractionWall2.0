@@ -45,6 +45,17 @@ public class PictureHandle : MonoBehaviour
 
     public List<YearsEvent> YearsEvents = new List<YearsEvent>();
 
+    /// <summary>
+    /// 前排的logo
+    /// </summary>
+    public List<YearsEvent> FrontLogos = new List<YearsEvent>();
+    /// <summary>
+    /// 后排的logo
+    /// </summary>
+    public List<YearsEvent> BackLogos = new List<YearsEvent>();
+
+    public List<YearsEvent> XieTongHuoDongList = new List<YearsEvent>();
+
     //public List<Texture2D> Texs = new List<Texture2D>();
 
 
@@ -116,7 +127,8 @@ public class PictureHandle : MonoBehaviour
         LoadPrivateHeirsPic();
         LoadPersonInfo();
 
-
+        LoadLogoInfo();
+        LoadXieTongHuoDong();
         //HandleTextureArry(Texs);
 
 
@@ -126,7 +138,47 @@ public class PictureHandle : MonoBehaviour
        
     }
 
-   
+    /// <summary>
+    /// 加载logo信息
+    /// </summary>
+    private void LoadLogoInfo()
+    {
+        //加载前排的logo
+        string frontInfos = Application.streamingAssetsPath + "/中信协同/Logos/Front";
+        string  [] frontFiles = Directory.GetDirectories(frontInfos);
+        foreach (string file in frontFiles)
+        {
+            if(file.Contains(".meta"))continue;
+            FrontLogos.Add(LoadYearEvent(file));
+        }
+
+        //加载后排的logos
+        string backInfos = Application.streamingAssetsPath + "/中信协同/Logos/Back";
+        string[] backFiles = Directory.GetDirectories(backInfos);
+        foreach (string file in backFiles)
+        {
+            if (file.Contains(".meta")) continue;
+            BackLogos.Add(LoadYearEvent(file));
+        }
+
+    }
+
+    /// <summary>
+    /// 加载协同营销活动信息
+    /// </summary>
+    private void LoadXieTongHuoDong()
+    {
+        //加载前排的logo
+        string frontInfos = Application.streamingAssetsPath + "/中信协同/协同营销活动";
+        string[] frontFiles = Directory.GetDirectories(frontInfos);
+        foreach (string file in frontFiles)
+        {
+            if (file.Contains(".meta")) continue;
+            XieTongHuoDongList.Add(LoadYearEvent(file));
+        }
+
+       
+    }
     // Update is called once per frame
     void Update()
     {
@@ -468,6 +520,76 @@ public class PictureHandle : MonoBehaviour
         return years;
 
     }
+
+    private YearsEvent LoadYearEvent(string path)
+    {
+        DirectoryInfo info = new DirectoryInfo(path);
+
+        YearsEvent yearsEvent = new YearsEvent();
+
+        yearsEvent.Years = info.Name;
+      
+
+
+        FileInfo[] fileInfos = info.GetFiles();
+
+
+
+        foreach (FileInfo fileInfo in fileInfos)
+        {
+            if (fileInfo.Extension == ".txt")
+            {
+
+                yearsEvent.DescribePath = fileInfo.FullName;
+
+                byte[] bytes = File.ReadAllBytes(fileInfo.FullName);
+
+                string str = Encoding.UTF8.GetString(bytes);
+
+                yearsEvent.Describe = str;
+            }
+            else if (fileInfo.Extension == ".jpg" || fileInfo.Extension == ".JPG" || fileInfo.Extension == ".jpeg")
+            {
+
+                yearsEvent.PicturesPath.Add(fileInfo.FullName);
+
+                byte[] bytes = File.ReadAllBytes(fileInfo.FullName);
+
+                Texture2D tex = new Texture2D(1024, 1024);
+
+                tex.LoadImage(bytes);
+
+                tex.Apply();
+
+                yearsEvent.TexList.Add(tex);
+               
+               
+            }
+            else if (fileInfo.Extension == ".mp4")
+            {
+                yearsEvent.YearEventVideo = fileInfo.FullName;
+            }
+            else if (fileInfo.Extension == ".png" || fileInfo.Extension == ".PNG")
+            {
+                yearsEvent.PicturesPath.Add(fileInfo.FullName);
+
+                byte[] bytes = File.ReadAllBytes(fileInfo.FullName);
+
+                Texture2D tex = new Texture2D(1024, 1024);
+
+                tex.LoadImage(bytes);
+
+                tex.Apply();
+
+                yearsEvent.TexList.Add(tex);
+
+              
+            }
+        }
+
+        return yearsEvent;
+    }
+
 
     public void LoadCompanyIntroductionPic()
     {
@@ -977,12 +1099,7 @@ public class PictureHandle : MonoBehaviour
     }  
     public void DestroyTexture()
     {
-        //foreach (Texture2D texture2D in Texs)
-        //{
-        //    Destroy(texture2D);
-        //}
-        //Texs.Clear();
-        //Texs = null;
+       
         Resources.UnloadUnusedAssets();
     }
 
@@ -1058,7 +1175,7 @@ public class YearsInfo
 }
 
 /// <summary>
-/// 年代事件类
+/// 年代事件类，logo信息类也是用这个
 /// </summary>
 public class YearsEvent
 {
@@ -1101,6 +1218,12 @@ public class YearsEvent
     /// 索引图片的长和宽
     /// </summary>
     public Dictionary<int, Vector2> PictureInfos;
+
+
+    /// <summary>
+    /// 加载的贴图,如果只有一张，默认就是logo图片
+    /// </summary>
+    public List<Texture2D> TexList = new List<Texture2D>();
 
     public YearsEvent()
     {

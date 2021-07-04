@@ -14,6 +14,6 @@ public class CloseFSM : UIStateFSM {
     {
         base.Enter();
 
-        Target.transform.Find("CompanyIntroduction").gameObject.SetActive(false);
+        Target.transform.Find("ZhongXinBaoChengFSM").gameObject.SetActive(false);
     }
 }

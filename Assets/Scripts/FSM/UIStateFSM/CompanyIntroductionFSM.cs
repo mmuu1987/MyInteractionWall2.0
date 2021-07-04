@@ -58,8 +58,20 @@ public class CompanyIntroductionFSM : UIStateFSM
     private List<Image> _highlights;
 
     private int _curIndex;
+
     private Transform _previous;
+
     private Transform _next;
+
+    private Transform _previousTouch;
+
+    private Transform _nextTouch;
+
+    private GameObject _gridGameObject;
+
+    private Transform _gridTransform;
+
+    private TouchEvent _touchEvent;
 
     public CompanyIntroductionFSM(Transform go, params  object[] args)
         : base(go)
@@ -146,8 +158,103 @@ public class CompanyIntroductionFSM : UIStateFSM
         AddVideoTex(HonorTexs, PictureHandle.Instance.CompanyAllTexList[3].VideoInfo);
         AddVideoTex(ProductTexs, PictureHandle.Instance.CompanyAllTexList[4].VideoInfo);
         AddVideoTex(ServiceTexs, PictureHandle.Instance.CompanyAllTexList[5].VideoInfo);
+
+
+        _gridGameObject = UIControl.Instance.GridPrefab;
+        _gridTransform = UIControl.Instance.GridParent;
+
+        CreatItem();
+
+        _touchEvent = ShowImage.GetComponent<TouchEvent>();
+
+        _touchEvent.TouchMoveEvent += TouchMoveEvent;
+
     }
 
+    private void TouchMoveEvent(bool isleft)
+    {
+        if (!isleft)
+        {
+            if(_previous.gameObject.activeInHierarchy)
+             Previous(null,null);
+        }
+        else
+        {
+            if (_next.gameObject.activeInHierarchy)
+                Next(null,null);
+        }
+    }
+
+
+    private void CreatItem()
+    {
+
+        float xTempUp = 560f;
+        float xtempDown = 1000f;
+        float endXUp = -1f;//上轴实例化出来后所摆放的右下角x位置
+        float endXDown = -1f;//下周实例化出来后所摆放右下角x位置
+
+        Vector2 itemSize = Vector2.zero;
+        for (int i = 0; i < 100; i++)
+        {
+
+            GridItem gi = Object.Instantiate(_gridGameObject, _gridTransform).GetComponent<GridItem>();
+
+
+
+            RectTransform rt = null;
+
+
+            if (i == 0 || i % 2 == 0)
+            {
+                rt = gi.SetInfo(true);
+
+                if (rt == null)
+                {
+                    float maxVal = endXUp > endXDown ? endXUp : endXDown;
+
+                    Vector2 size = _gridTransform.GetComponent<RectTransform>().sizeDelta;
+                    _gridTransform.GetComponent<RectTransform>().sizeDelta = new Vector2(maxVal + itemSize.x, size.y);
+                    Object.Destroy(gi.gameObject);
+                    break;
+                }
+
+                itemSize = rt.sizeDelta;
+                if (endXUp < 0f)
+                    endXUp = xTempUp + itemSize.x * (i / 2f);
+                else
+                {
+                    endXUp += itemSize.x;
+                }
+                rt.anchoredPosition = new Vector2(endXUp, 0f);
+
+            }
+            else if (i % 2 != 0)
+            {
+                rt = gi.SetInfo(false);
+
+                if (rt == null)
+                {
+                    float maxVal = endXUp > endXDown ? endXUp : endXDown;
+
+                    Vector2 size = _gridTransform.GetComponent<RectTransform>().sizeDelta;
+                    _gridTransform.GetComponent<RectTransform>().sizeDelta = new Vector2(maxVal + itemSize.x, size.y);
+                    Object.Destroy(gi.gameObject);
+                    break;
+                }
+                itemSize = rt.sizeDelta;
+                if (endXDown < 0f)
+                    endXDown = xtempDown + itemSize.x * (i - 1) / 2;
+                else
+                {
+                    endXDown += itemSize.x;
+                }
+                rt.anchoredPosition = new Vector2(endXDown, -1164f);
+            }
+
+
+        }
+    }
     private void SetBtn(List<Texture2D> texs)
     {
         _curTex = texs;
@@ -159,12 +266,16 @@ public class CompanyIntroductionFSM : UIStateFSM
         {
             _previous.gameObject.SetActive(false);
             _next.gameObject.SetActive(false);
+            _nextTouch.gameObject.SetActive(false);
+            _previousTouch.gameObject.SetActive(false);
         }
         else
         {
 
             _previous.gameObject.SetActive(false);
             _next.gameObject.SetActive(true);
+            _nextTouch.gameObject.SetActive(true);
+            _previousTouch.gameObject.SetActive(false);
 
         }
 
@@ -191,11 +302,15 @@ public class CompanyIntroductionFSM : UIStateFSM
     {
         base.Enter();
 
-        _previous = Target.transform.Find("CompanyIntroduction/Previous");
+        _previous = Target.transform.Find("ZhongXinBaoChengFSM/Previous");
 
-        _next = Target.transform.Find("CompanyIntroduction/Next");
+        _next = Target.transform.Find("ZhongXinBaoChengFSM/Next");
 
-        EventTriggerListener.Get(_previous.gameObject).SetEventHandle(EnumTouchEventType.OnClick, Previous);
+       _previousTouch = Target.transform.Find("ZhongXinBaoChengFSM/TouchPrevious"); ;
+
+       _nextTouch = Target.transform.Find("ZhongXinBaoChengFSM/TouchNext"); ;
+
+       EventTriggerListener.Get(_previous.gameObject).SetEventHandle(EnumTouchEventType.OnClick, Previous);
 
         EventTriggerListener.Get(_next.gameObject).SetEventHandle(EnumTouchEventType.OnClick, Next);
 
@@ -221,11 +336,15 @@ public class CompanyIntroductionFSM : UIStateFSM
         {
             _previous.gameObject.SetActive(true);
             _next.gameObject.SetActive(false);
+            _nextTouch.gameObject.SetActive(false);
+            _previousTouch.gameObject.SetActive(true);
         }
         else
         {
             _previous.gameObject.SetActive(true);
             _next.gameObject.SetActive(true);
+            _nextTouch.gameObject.SetActive(true);
+            _previousTouch.gameObject.SetActive(true);
         }
       
     }
@@ -245,11 +364,15 @@ public class CompanyIntroductionFSM : UIStateFSM
         {
             _previous.gameObject.SetActive(false);
             _next.gameObject.SetActive(true);
+            _nextTouch.gameObject.SetActive(true);
+            _previousTouch.gameObject.SetActive(false);
         }
         else
         {
             _previous.gameObject.SetActive(true);
             _next.gameObject.SetActive(true);
+            _nextTouch.gameObject.SetActive(true);
+            _previousTouch.gameObject.SetActive(true);
         }
 
      

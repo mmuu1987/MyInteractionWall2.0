@@ -89,6 +89,7 @@ public class UIControl : MonoBehaviour
 
     public Transform GridParent;
 
+    public Material LogoIteMaterial;
     private void Awake()
     {
         if(Instance!=null)throw new UnityException("已经设置了单例");
@@ -104,14 +105,7 @@ public class UIControl : MonoBehaviour
 
         _Machine = new UIStateMachine(this);
 
-        DicUI.Add(UIState.DaShiJi, new DaShiJianFSM(this.transform.Find("DaShiJiFSM"), GridPrefab, GridParent));
-        DicUI.Add(UIState.ZhongXinXieTong, new ZhongXinXieTongFSM(this.transform.Find("ZhongXinXieTongFSM"), LogoGameObject));
-        DicUI.Add(UIState.CompanyIntroduction, new CompanyIntroductionFSM(this.transform.Find("CompanyIntroduction/CompanyIntroduction")));
-        DicUI.Add(UIState.PrivateHeirs, new PrivateHeirsFSM(this.transform.Find("CompanyIntroduction/PrivateHeirs")));
-        DicUI.Add(UIState.OutstandingStyle, new OutstandingStyleFSM(this.transform.Find("CompanyIntroduction/OutstandingStyle")));
-        DicUI.Add(UIState.Close, new CloseFSM(null));
-
-        _Machine.SetCurrentState(DicUI[UIState.Close]);
+       
 
 
 
@@ -192,7 +186,18 @@ public class UIControl : MonoBehaviour
 
           
 		}));
-	}
+
+
+
+       // DicUI.Add(UIState.DaShiJi, new DaShiJianFSM(this.transform.Find("ZhongXinBaoCheng"), GridPrefab, GridParent));
+        DicUI.Add(UIState.ZhongXinXieTong, new ZhongXinXieTongFSM(this.transform.Find("ZhongXinXieTongFSM"), LogoGameObject, LogoIteMaterial));
+        DicUI.Add(UIState.CompanyIntroduction, new CompanyIntroductionFSM(this.transform.Find("ZhongXinBaoChengFSM/CompanyIntroduction")));
+        DicUI.Add(UIState.PrivateHeirs, new PrivateHeirsFSM(this.transform.Find("ZhongXinBaoChengFSM/PrivateHeirs")));
+        DicUI.Add(UIState.OutstandingStyle, new OutstandingStyleFSM(this.transform.Find("ZhongXinBaoChengFSM/OutstandingStyle")));
+        DicUI.Add(UIState.Close, new CloseFSM(null));
+
+        _Machine.SetCurrentState(DicUI[UIState.Close]);
+    }
 
     public void ShowImageFun(Texture tex)
     {
@@ -285,9 +290,11 @@ public class UIControl : MonoBehaviour
         ShowImageParentBtn.transform.DOScale(1f, 0.55f).SetEase(Ease.InOutQuart);
         ShowImageParentBtn.GetComponent<Image>().DOFade(0.25f, 0.55f);
     }
+
+    public void ChangeState(UIState state)
+    {
+        _Machine.ChangeState(DicUI[state]);
+    }
+}
 	
 	// Update is called once per frame
-	void Update () {
-		
-	}
-}

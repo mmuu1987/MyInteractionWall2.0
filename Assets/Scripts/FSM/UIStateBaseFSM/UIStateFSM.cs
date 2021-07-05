@@ -128,7 +128,8 @@ public class UIStateFSM : FsmState<UIControl>
         {
             trigger.enabled = false;
         }
+
         if(Parent!=null)
-        Parent.gameObject.SetActive(false);
+         Parent.gameObject.SetActive(false);
     }
 }

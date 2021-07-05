@@ -100,6 +100,9 @@ public class SettingManager : Singleton<SettingManager>
             case Direct.PhThree:
                 dif = new DirectoryInfo(path + Setting.PhThree);
                 break;
+            case Direct.PhFour:
+                dif = new DirectoryInfo(path + Setting.PhFour);
+                break;
             case Direct.OsOne:
                 dif = new DirectoryInfo(path + Setting.OsOne);
                 break;
@@ -180,6 +183,11 @@ public class Setting
     public string PhThree;
 
     /// <summary>
+    /// 私享穿甲第3栏
+    /// </summary>
+    public string PhFour;
+
+    /// <summary>
     /// 卓越风采第1栏
     /// </summary>
     public string OsOne;
@@ -212,6 +220,7 @@ public class Setting
         PhOne =  "/私享传家/品牌介绍";
         PhTwo =  "/私享传家/尊享服务";
         PhThree =  "/私享传家/大湾区高净值中心";
+        PhFour = "/私享传家/传家视频";
 
         OsOne = "/卓越风采/MDRT荣誉榜";
         OsTwo ="/卓越风采/2020年MDRT达标榜";
@@ -238,6 +247,7 @@ public enum Direct
     PhOne,
     PhTwo,
     PhThree,
+    PhFour,
     OsOne,
     OsTwo,
     OsThree

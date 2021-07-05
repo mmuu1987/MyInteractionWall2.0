@@ -288,7 +288,7 @@ public class UIControl : MonoBehaviour
 
 
         ShowImageParentBtn.transform.DOScale(1f, 0.55f).SetEase(Ease.InOutQuart);
-        ShowImageParentBtn.GetComponent<Image>().DOFade(0.25f, 0.55f);
+        ShowImageParentBtn.GetComponent<Image>().DOFade(0f, 0.55f);
     }
 
     public void ChangeState(UIState state)

@@ -22,6 +22,8 @@ public class PrivateHeirsFSM : UIStateFSM
     /// </summary>
     public Button ValueAddedServices;
 
+    public Button ChuanJiaShiPinBtn;
+
     private List<Texture2D> _brandTex;
 
   
@@ -29,6 +31,8 @@ public class PrivateHeirsFSM : UIStateFSM
     public List<Texture2D> DawanTex;
 
     public List<Texture2D> ValueAddTex;
+
+    public List<Texture2D> ChuanDiTex;
 
     /// <summary>
     /// 显示内容的贴图  
@@ -63,6 +67,9 @@ public class PrivateHeirsFSM : UIStateFSM
 
         DawanDistrictBtn = Parent.transform.Find("3大湾区高净值中心").GetComponent<Button>();
 
+
+        ChuanJiaShiPinBtn = Parent.transform.Find("4传家视频").GetComponent<Button>();
+
         ShowImage = Parent.parent.Find("ShowImage").GetComponent<RawImage>();
 
         _brandTex = PictureHandle.Instance.PrivateHeirsAllTexList[0].TexInfo;
@@ -96,11 +103,21 @@ public class PrivateHeirsFSM : UIStateFSM
             SetHighlight(ValueAddedServices.transform);
         }));
         ValueAddedServices.transform.Find("Text").GetComponent<Text>().text = SettingManager.Instance.GetDirectName(Direct.PhThree);
-       
+
+
+        ChuanJiaShiPinBtn.transform.Find("Text").GetComponent<Text>().text = SettingManager.Instance.GetDirectName(Direct.PhFour);
+        ChuanJiaShiPinBtn.onClick.AddListener((() =>
+        {
+            SetBtn(ChuanDiTex);
+            SetHighlight(ChuanJiaShiPinBtn.transform);
+        }));
+
+
 
         _highlights.Add(BrandIntroductionBtn.transform.Find("Image").GetComponent<Image>());
         _highlights.Add(ValueAddedServices.transform.Find("Image").GetComponent<Image>());
         _highlights.Add(DawanDistrictBtn.transform.Find("Image").GetComponent<Image>());
+        _highlights.Add(ChuanJiaShiPinBtn.transform.Find("Image").GetComponent<Image>());
 
 
         SetHighlight(BrandIntroductionBtn.transform);
@@ -109,7 +126,8 @@ public class PrivateHeirsFSM : UIStateFSM
         AddVideoTex(_brandTex, PictureHandle.Instance.PrivateHeirsAllTexList[0].VideoInfo);
         AddVideoTex(DawanTex, PictureHandle.Instance.PrivateHeirsAllTexList[1].VideoInfo);
         AddVideoTex(ValueAddTex, PictureHandle.Instance.PrivateHeirsAllTexList[2].VideoInfo);
-      
+        AddVideoTex(ChuanDiTex, PictureHandle.Instance.PrivateHeirsAllTexList[2].VideoInfo);
+
 
     }
 
@@ -119,9 +137,9 @@ public class PrivateHeirsFSM : UIStateFSM
     {
         base.Enter();
 
-        _previous = Target.transform.Find("CompanyIntroduction/Previous");
+        _previous = Target.transform.Find("ZhongXinBaoChengFSM/Previous");
 
-        _next = Target.transform.Find("CompanyIntroduction/Next");
+        _next = Target.transform.Find("ZhongXinBaoChengFSM/Next");
 
         EventTriggerListener.Get(_previous.gameObject).SetEventHandle(EnumTouchEventType.OnClick, Previous);
 

@@ -56,6 +56,14 @@ public class PictureHandle : MonoBehaviour
 
     public List<YearsEvent> XieTongHuoDongList = new List<YearsEvent>();
 
+    public List<YearsEvent> SiXiangChuanJia_ChuanJiaHui = new List<YearsEvent>();
+
+    public List<YearsEvent> SiXiangChuanJia_GaoDuanHuoDong = new List<YearsEvent>();
+
+    public List<string> YingSheGUanList= new List<string>();
+
+
+
     //public List<Texture2D> Texs = new List<Texture2D>();
 
 
@@ -129,6 +137,8 @@ public class PictureHandle : MonoBehaviour
 
         LoadLogoInfo();
         LoadXieTongHuoDong();
+        LoadSiXiangChunJiaTextures();
+        LoadYingSheGuan();
         //HandleTextureArry(Texs);
 
 
@@ -178,6 +188,45 @@ public class PictureHandle : MonoBehaviour
         }
 
        
+    }
+    /// <summary>
+    /// 加载私享传家2.0版本新增的
+    /// </summary>
+    private void LoadSiXiangChunJiaTextures()
+    {
+        //加载SiXiangChuanjia传家会
+        string frontInfos = Application.streamingAssetsPath + "/私享传家/传家荟";
+        string[] frontFiles = Directory.GetDirectories(frontInfos);
+        foreach (string file in frontFiles)
+        {
+            if (file.Contains(".meta")) continue;
+            SiXiangChuanJia_ChuanJiaHui.Add(LoadYearEvent(file));
+        }
+
+
+        ///加载SiXiangChuanjia高端活动
+        string frontInfos1= Application.streamingAssetsPath + "/私享传家/高端活动";
+        string[] frontFiles1 = Directory.GetDirectories(frontInfos1);
+        foreach (string file in frontFiles1)
+        {
+            if (file.Contains(".meta")) continue;
+            SiXiangChuanJia_GaoDuanHuoDong.Add(LoadYearEvent(file));
+        }
+
+
+    }
+
+    private void LoadYingSheGuan()
+    {
+        string path = Application.streamingAssetsPath + "/映像馆";
+
+        string[] files = Directory.GetFiles(path);
+
+        foreach (string file in files)
+        {
+            if(file.Contains(".meta"))continue;
+            YingSheGUanList.Add(file);
+        }
     }
     // Update is called once per frame
     void Update()

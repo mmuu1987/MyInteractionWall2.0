@@ -45,6 +45,7 @@ public class XieTongWeiHuoDong : MonoBehaviour
     {
         ShowRawImageParent.GetComponent<Button>().onClick.AddListener((() =>
         {
+            ShowRawImageParent.rectTransform.DOKill();
             ShowRawImageParent.rectTransform.DOScale(Vector3.zero, 0.35f);
         }));
 
@@ -143,6 +144,7 @@ public class XieTongWeiHuoDong : MonoBehaviour
             rawImage.GetComponent<Button>().onClick.AddListener((() =>
             {
                 ShowRawImage.texture = rawImage.texture;
+                ShowRawImageParent.rectTransform.DOKill();
                 ShowRawImageParent.rectTransform.DOScale(Vector3.one, 0.35f);
             }));
         }

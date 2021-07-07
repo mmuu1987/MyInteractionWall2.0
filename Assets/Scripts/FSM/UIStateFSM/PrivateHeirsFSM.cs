@@ -54,7 +54,13 @@ public class PrivateHeirsFSM : UIStateFSM
     private Transform _previous;
     private Transform _next;
 
-   
+    private Transform _previousTouch;
+
+    private Transform _nextTouch;
+
+
+    private TouchEvent _touchEvent;
+
     public PrivateHeirsFSM(Transform go) : base(go)
     {
         _highlights = new List<Image>();
@@ -63,9 +69,9 @@ public class PrivateHeirsFSM : UIStateFSM
 
         BrandIntroductionBtn = Parent.transform.Find("1品牌介绍").GetComponent<Button>();
 
-        ValueAddedServices = Parent.transform.Find("2尊享服务").GetComponent<Button>();
+        ValueAddedServices = Parent.transform.Find("2增值服务体系").GetComponent<Button>();
 
-        DawanDistrictBtn = Parent.transform.Find("3大湾区高净值中心").GetComponent<Button>();
+        DawanDistrictBtn = Parent.transform.Find("3传缔致远").GetComponent<Button>();
 
 
         ChuanJiaShiPinBtn = Parent.transform.Find("4传家视频").GetComponent<Button>();
@@ -78,10 +84,11 @@ public class PrivateHeirsFSM : UIStateFSM
 
         ValueAddTex = PictureHandle.Instance.PrivateHeirsAllTexList[2].TexInfo;
 
-    
+        ChuanDiTex = PictureHandle.Instance.PrivateHeirsAllTexList[3].TexInfo;
 
 
-      
+
+
 
         BrandIntroductionBtn.onClick.AddListener((() =>
         {
@@ -126,7 +133,20 @@ public class PrivateHeirsFSM : UIStateFSM
         AddVideoTex(_brandTex, PictureHandle.Instance.PrivateHeirsAllTexList[0].VideoInfo);
         AddVideoTex(DawanTex, PictureHandle.Instance.PrivateHeirsAllTexList[1].VideoInfo);
         AddVideoTex(ValueAddTex, PictureHandle.Instance.PrivateHeirsAllTexList[2].VideoInfo);
-        AddVideoTex(ChuanDiTex, PictureHandle.Instance.PrivateHeirsAllTexList[2].VideoInfo);
+        AddVideoTex(ChuanDiTex, PictureHandle.Instance.PrivateHeirsAllTexList[3].VideoInfo);
+
+        _touchEvent = ShowImage.GetComponent<TouchEvent>();
+
+        go.transform.Find("Scroll View1").GetComponent<SiXiangChuanJiaHuoDong>().Init(PictureHandle.Instance.SiXiangChuanJia_ChuanJiaHui);
+
+        go.transform.Find("Scroll View2").GetComponent<SiXiangChuanJiaHuoDong>().Init(PictureHandle.Instance.SiXiangChuanJia_GaoDuanHuoDong);
+
+
+        go.transform.parent.Find("CloseBtn").GetComponent<Button>().onClick.RemoveAllListeners();
+        go.transform.parent.Find("CloseBtn").GetComponent<Button>().onClick.AddListener((() =>
+        {
+            UIControl.Instance.ChangeState(UIState.Close);
+        }));
 
 
     }
@@ -141,6 +161,12 @@ public class PrivateHeirsFSM : UIStateFSM
 
         _next = Target.transform.Find("ZhongXinBaoChengFSM/Next");
 
+
+        _previousTouch = Target.transform.Find("ZhongXinBaoChengFSM/TouchPrevious"); ;
+
+        _nextTouch = Target.transform.Find("ZhongXinBaoChengFSM/TouchNext"); ;
+
+
         EventTriggerListener.Get(_previous.gameObject).SetEventHandle(EnumTouchEventType.OnClick, Previous);
 
         EventTriggerListener.Get(_next.gameObject).SetEventHandle(EnumTouchEventType.OnClick, Next);
@@ -148,28 +174,47 @@ public class PrivateHeirsFSM : UIStateFSM
         _curTex = _brandTex;
         BrandIntroductionBtn.onClick.Invoke();
         Parent.parent.gameObject.SetActive(true);//父级别也要显示
-      
 
 
-     
+        _touchEvent.TouchMoveEvent += TouchMoveEvent;
+
+
+    }
+
+    private void TouchMoveEvent(bool isleft)
+    {
+        if (!isleft)
+        {
+            if (_previous.gameObject.activeInHierarchy)
+                Previous(null, null);
+        }
+        else
+        {
+            if (_next.gameObject.activeInHierarchy)
+                Next(null, null);
+        }
     }
     private void SetBtn(List<Texture2D> texs)
     {
         _curTex = texs;
         _curIndex = 0;
         ShowImage.texture = _curTex[_curIndex];
-        CheckVideoTex(null, ShowImage.gameObject);
+        CheckVideoTex(_curTex[_curIndex], ShowImage.gameObject);
 
         if (_curTex.Count == 1)
         {
             _previous.gameObject.SetActive(false);
             _next.gameObject.SetActive(false);
+            _nextTouch.gameObject.SetActive(false);
+            _previousTouch.gameObject.SetActive(false);
         }
         else
         {
 
             _previous.gameObject.SetActive(false);
             _next.gameObject.SetActive(true);
+            _nextTouch.gameObject.SetActive(true);
+            _previousTouch.gameObject.SetActive(false);
 
         }
 
@@ -208,11 +253,15 @@ public class PrivateHeirsFSM : UIStateFSM
         {
             _previous.gameObject.SetActive(true);
             _next.gameObject.SetActive(false);
+            _nextTouch.gameObject.SetActive(false);
+            _previousTouch.gameObject.SetActive(true);
         }
         else
         {
             _previous.gameObject.SetActive(true);
             _next.gameObject.SetActive(true);
+            _nextTouch.gameObject.SetActive(true);
+            _previousTouch.gameObject.SetActive(true);
         }
       
         
@@ -233,11 +282,15 @@ public class PrivateHeirsFSM : UIStateFSM
         {
             _previous.gameObject.SetActive(false);
             _next.gameObject.SetActive(true);
+            _nextTouch.gameObject.SetActive(true);
+            _previousTouch.gameObject.SetActive(false);
         }
         else
         {
             _previous.gameObject.SetActive(true);
             _next.gameObject.SetActive(true);
+            _nextTouch.gameObject.SetActive(true);
+            _previousTouch.gameObject.SetActive(true);
         }
 
     }
@@ -249,6 +302,8 @@ public class PrivateHeirsFSM : UIStateFSM
         base.Exit();
 
         Parent.gameObject.SetActive(false);
+
+        _touchEvent.TouchMoveEvent -= TouchMoveEvent;
 
     }
 }

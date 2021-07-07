@@ -76,7 +76,7 @@ public class CompanyIntroductionFSM : UIStateFSM
     public CompanyIntroductionFSM(Transform go, params  object[] args)
         : base(go)
     {
-
+      
 
         _highlights = new List<Image>();
 
@@ -167,7 +167,13 @@ public class CompanyIntroductionFSM : UIStateFSM
 
         _touchEvent = ShowImage.GetComponent<TouchEvent>();
 
-        _touchEvent.TouchMoveEvent += TouchMoveEvent;
+        go.transform.parent.Find("CloseBtn").GetComponent<Button>().onClick.RemoveAllListeners();
+        go.transform.parent.Find("CloseBtn").GetComponent<Button>().onClick.AddListener((() =>
+        {
+            UIControl.Instance.ChangeState(UIState.Close);
+        }));
+
+
 
     }
 
@@ -301,7 +307,7 @@ public class CompanyIntroductionFSM : UIStateFSM
     public override void Enter()
     {
         base.Enter();
-
+        _touchEvent.TouchMoveEvent += TouchMoveEvent;
         _previous = Target.transform.Find("ZhongXinBaoChengFSM/Previous");
 
         _next = Target.transform.Find("ZhongXinBaoChengFSM/Next");
@@ -381,6 +387,7 @@ public class CompanyIntroductionFSM : UIStateFSM
     public override void Exit()
     {
         base.Exit();
+        _touchEvent.TouchMoveEvent -= TouchMoveEvent;
 
     }
 

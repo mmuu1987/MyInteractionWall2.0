@@ -87,7 +87,7 @@ public class UIStateFSM : FsmState<UIControl>
             showGo.gameObject.SetActive(false);
 
             string url = path[1];
-
+            _videoPlayer.gameObject.SetActive(true);
             _videoPlayer.url = "file://" + url;
             _videoPlayer.transform.localScale = Vector3.one * 0.35f;
             _videoPlayer.enabled = true;
@@ -95,6 +95,7 @@ public class UIStateFSM : FsmState<UIControl>
         }
         else
         {
+            _videoPlayer.gameObject.SetActive(false);
             _videoPlayer.transform.localScale = Vector3.zero;
             showGo.gameObject.SetActive(true);
             _videoPlayer.Stop();

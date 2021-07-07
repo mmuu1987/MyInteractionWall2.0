@@ -71,7 +71,7 @@ public class HonorWallManager : MonoBehaviour
 
         HeadItem item = Instantiate(HonorItem, Canvas.transform);
 
-        item.transform.SetSiblingIndex(10);
+        item.transform.SetSiblingIndex(12);
 
         item.RectTransform.anchoredPosition = data.position;
 

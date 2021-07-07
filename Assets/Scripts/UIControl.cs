@@ -29,6 +29,8 @@ public enum UIState
 
     ZhongXinXieTong,
 
+    YingXiangGuan,
+
     DaShiJi
 }
 /// <summary>
@@ -59,7 +61,7 @@ public class UIControl : MonoBehaviour
     /// <summary>
     /// 卓越风采
     /// </summary>
-    public Button OutstandingStyleBtn;
+    public Button YingSheGuanBtn;
 
     public Button ZhonXinXeiTongBtn;
 
@@ -68,9 +70,13 @@ public class UIControl : MonoBehaviour
 
     public Button ShowImageParentBtn;
 
+    public Button BackLeft;
+
+    public Button BackRight;
+
     public RawImage ShowImage;
 
-   
+    public VideoPlayManager VideoPlayManager;
     /// <summary>
     /// 荣誉墙
     /// </summary>
@@ -88,6 +94,10 @@ public class UIControl : MonoBehaviour
     public GameObject GridPrefab;
 
     public Transform GridParent;
+
+    public GameObject VideoPrefab;
+
+    public GameObject VideoParent;
 
     public Material LogoIteMaterial;
     private void Awake()
@@ -129,9 +139,9 @@ public class UIControl : MonoBehaviour
             _Machine.ChangeState(DicUI[UIState.PrivateHeirs]);
         }));
 
-        OutstandingStyleBtn.onClick.AddListener((() =>
+        YingSheGuanBtn.onClick.AddListener((() =>
         {
-            _Machine.ChangeState(DicUI[UIState.OutstandingStyle]);
+            _Machine.ChangeState(DicUI[UIState.YingXiangGuan]);
         }));
 
         CloseButton.onClick.AddListener((() =>
@@ -150,42 +160,11 @@ public class UIControl : MonoBehaviour
 	// Use this for initialization
 	void Start () 
     {
-        HonorWallBtn.onClick.AddListener((() =>
-        {
+        HonorWallBtn.onClick.AddListener((ShowHonorWall));
 
-            RectTransform btRt = HonorWallBtn.GetComponent<RectTransform>();
+        BackLeft.onClick.AddListener((ShowHonorWall));
 
-
-           
-		    if (HonorWall.position.x < 0)//打开荣誉墙
-		    {
-		        HonorWall.DOLocalMoveX(0f, 0.5f).SetEase(Ease.InOutQuad);
-                btRt.DOAnchorPosX(245.5f, 0.5f).SetEase(Ease.InOutQuad);
-                HonorWallBtn.transform.Find("Image").GetComponent<Image>().sprite = HonorWallBtnLeft;
-
-		        Item[] items = this.transform.GetComponentsInChildren<Item>();
-
-                foreach (Item item in items)
-		        {
-		            Destroy(item.gameObject);
-		        }
-		    }
-		    else//关闭荣誉墙
-		    {
-		        HonorWall.DOLocalMoveX(-7680, 0.5f).SetEase(Ease.InOutQuad);
-                btRt.DOAnchorPosX(0f, 0.5f).SetEase(Ease.InOutQuad);
-                HonorWallBtn.transform.Find("Image").GetComponent<Image>().sprite = HonorWallBtnRight;
-
-                HeadItem[] items = this.transform.GetComponentsInChildren<HeadItem>();
-
-                foreach (HeadItem item in items)
-                {
-                    Destroy(item.gameObject);
-                }
-		    }
-
-          
-		}));
+        BackRight.onClick.AddListener((ShowHonorWall));
 
 
 
@@ -194,11 +173,40 @@ public class UIControl : MonoBehaviour
         DicUI.Add(UIState.CompanyIntroduction, new CompanyIntroductionFSM(this.transform.Find("ZhongXinBaoChengFSM/CompanyIntroduction")));
         DicUI.Add(UIState.PrivateHeirs, new PrivateHeirsFSM(this.transform.Find("ZhongXinBaoChengFSM/PrivateHeirs")));
         DicUI.Add(UIState.OutstandingStyle, new OutstandingStyleFSM(this.transform.Find("ZhongXinBaoChengFSM/OutstandingStyle")));
+        DicUI.Add(UIState.YingXiangGuan, new YingXiangGuanFSM(this.transform.Find("YinXiangGuanFSM")));
         DicUI.Add(UIState.Close, new CloseFSM(null));
 
         _Machine.SetCurrentState(DicUI[UIState.Close]);
     }
 
+    private void ShowHonorWall()
+    {
+        if (HonorWall.position.x < 0)//打开荣誉墙
+        {
+            HonorWall.DOLocalMoveX(0f, 0.5f).SetEase(Ease.InOutQuad);
+
+            Item[] items = this.transform.GetComponentsInChildren<Item>();
+
+            foreach (Item item in items)
+            {
+                Destroy(item.gameObject);
+            }
+        }
+        else//关闭荣誉墙
+        {
+            HonorWall.DOLocalMoveX(-7680, 0.5f).SetEase(Ease.InOutQuad);
+         
+            HonorWallBtn.transform.Find("Image").GetComponent<Image>().sprite = HonorWallBtnRight;
+
+            HeadItem[] items = this.transform.GetComponentsInChildren<HeadItem>();
+
+            foreach (HeadItem item in items)
+            {
+                Destroy(item.gameObject);
+            }
+        }
+
+    }
     public void ShowImageFun(Texture tex)
     {
         Vector2 temp = new Vector2(tex.width, tex.height);

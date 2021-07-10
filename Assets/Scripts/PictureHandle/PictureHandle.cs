@@ -60,6 +60,8 @@ public class PictureHandle : MonoBehaviour
 
     public List<YearsEvent> SiXiangChuanJia_GaoDuanHuoDong = new List<YearsEvent>();
 
+    public List<YearsEvent> DaShiJi= new List<YearsEvent>();
+
     public List<string> YingSheGUanList= new List<string>();
 
 
@@ -139,6 +141,7 @@ public class PictureHandle : MonoBehaviour
         LoadXieTongHuoDong();
         LoadSiXiangChunJiaTextures();
         LoadYingSheGuan();
+        LoadDaShiJi();
         //HandleTextureArry(Texs);
 
 
@@ -226,6 +229,17 @@ public class PictureHandle : MonoBehaviour
         {
             if(file.Contains(".meta"))continue;
             YingSheGUanList.Add(file);
+        }
+    }
+
+    private void LoadDaShiJi()
+    {
+        string frontInfos1 = Application.streamingAssetsPath + "/高净值大事记";
+        string[] frontFiles1 = Directory.GetDirectories(frontInfos1);
+        foreach (string file in frontFiles1)
+        {
+            if (file.Contains(".meta")) continue;
+            DaShiJi.Add(LoadYearEvent(file));
         }
     }
     // Update is called once per frame

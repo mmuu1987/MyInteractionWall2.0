@@ -98,7 +98,7 @@ public class XieTongWeiHuoDong : MonoBehaviour
 
             foreach (RawImage image in _curRawImages)
             {
-                Destroy(image.gameObject);
+                Destroy(image.transform.parent.gameObject);
             }
             _curRawImages.Clear();
             Debug.Log("重置数据");
@@ -135,13 +135,18 @@ public class XieTongWeiHuoDong : MonoBehaviour
 
         foreach (Texture2D texture2D in _curYearsEvent.TexList)
         {
-            RawImage rawImage = Instantiate(ImageIemPrefab, Parent).GetComponent<RawImage>();
+            RawImage rawImage = Instantiate(ImageIemPrefab, Parent).transform.Find("Content").GetComponent<RawImage>();
 
             rawImage.texture = texture2D;
 
+            Vector2 newSize =
+                Common.ShowImageFun(new Vector2(texture2D.width, texture2D.height), new Vector2(520f, 400f));
+
+            rawImage.rectTransform.sizeDelta = newSize;
+
             _curRawImages.Add(rawImage);
 
-            rawImage.GetComponent<Button>().onClick.AddListener((() =>
+            rawImage.transform.parent.GetComponent<Button>().onClick.AddListener((() =>
             {
                 ShowRawImage.texture = rawImage.texture;
                 ShowRawImageParent.rectTransform.DOKill();

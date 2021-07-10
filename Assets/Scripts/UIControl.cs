@@ -70,11 +70,15 @@ public class UIControl : MonoBehaviour
 
     public Button ShowImageParentBtn;
 
+    public Button ShowDaShiJiRawImageBtn;
+
     public Button BackLeft;
 
     public Button BackRight;
 
     public RawImage ShowImage;
+
+    public RawImage ShowDaShiJiRawImage;
 
     public VideoPlayManager VideoPlayManager;
     /// <summary>
@@ -87,6 +91,7 @@ public class UIControl : MonoBehaviour
     public Dictionary<UIState, UIStateFSM> DicUI;
 
     public Sprite HonorWallBtnLeft;
+
     public Sprite HonorWallBtnRight;
 
     public GameObject LogoGameObject;
@@ -100,6 +105,10 @@ public class UIControl : MonoBehaviour
     public GameObject VideoParent;
 
     public Material LogoIteMaterial;
+
+    public GameObject DaShiJiPrefab;
+
+    public GameObject DaShiJiParent;
     private void Awake()
     {
         if(Instance!=null)throw new UnityException("已经设置了单例");
@@ -155,6 +164,12 @@ public class UIControl : MonoBehaviour
             ShowImageParentBtn.GetComponent<Image>().DOFade(0f, 0.55f);
         });
 
+        ShowDaShiJiRawImageBtn.onClick.AddListener(() =>
+        {
+            ShowDaShiJiRawImageBtn.transform.DOScale(Vector3.zero, 0.55f).SetEase(Ease.InOutQuad).SetDelay(0.15f);
+            ShowDaShiJiRawImageBtn.GetComponent<Image>().DOFade(0f, 0.55f);
+        });
+
     }
     
 	// Use this for initialization
@@ -174,11 +189,17 @@ public class UIControl : MonoBehaviour
         DicUI.Add(UIState.PrivateHeirs, new PrivateHeirsFSM(this.transform.Find("ZhongXinBaoChengFSM/PrivateHeirs")));
         DicUI.Add(UIState.OutstandingStyle, new OutstandingStyleFSM(this.transform.Find("ZhongXinBaoChengFSM/OutstandingStyle")));
         DicUI.Add(UIState.YingXiangGuan, new YingXiangGuanFSM(this.transform.Find("YinXiangGuanFSM")));
+        DicUI.Add(UIState.DaShiJi, new DaShiJianFSM(this.transform.Find("GaoJingZhiDaShiJi"),DaShiJiPrefab,DaShiJiParent.transform));
         DicUI.Add(UIState.Close, new CloseFSM(null));
 
         _Machine.SetCurrentState(DicUI[UIState.Close]);
     }
 
+
+    private void Update()
+    {
+        _Machine.SmUpdate();
+    }
     private void ShowHonorWall()
     {
         if (HonorWall.position.x < 0)//打开荣誉墙
@@ -207,13 +228,13 @@ public class UIControl : MonoBehaviour
         }
 
     }
-    public void ShowImageFun(Texture tex)
+    public void ShowImageFun(Texture tex,Vector2 maxSize)
     {
         Vector2 temp = new Vector2(tex.width, tex.height);
 
 
         //图片的容器的宽高
-        Vector2 size = new Vector2(3600f,2224f);
+        Vector2 size = maxSize;//new Vector2(3600f,2224f);
 
 
 
@@ -281,15 +302,15 @@ public class UIControl : MonoBehaviour
 
         ShowImage.texture = tex;
 
-
-        if (temp.x <= 1500f)
-        {
-            ShowImage.rectTransform.sizeDelta = new Vector2(temp.x*3f, temp.y*3f);
-        }
-        else
-        {
-            ShowImage.rectTransform.sizeDelta = new Vector2(temp.x, temp.y);
-        }
+        ShowImage.rectTransform.sizeDelta = new Vector2(temp.x, temp.y);
+        //if (temp.x <= 1500f)
+        //{
+        //    ShowImage.rectTransform.sizeDelta = new Vector2(temp.x*3f, temp.y*3f);
+        //}
+        //else
+        //{
+           
+        //}
        
 
         //如果缩放的图片太小，我们就把他放大一点
@@ -297,6 +318,84 @@ public class UIControl : MonoBehaviour
 
         ShowImageParentBtn.transform.DOScale(1f, 0.55f).SetEase(Ease.InOutQuart);
         ShowImageParentBtn.GetComponent<Image>().DOFade(0f, 0.55f);
+    }
+    public void ShowDaShiJiImage(Texture tex,string description)
+    {
+        Vector2 temp = new Vector2(tex.width, tex.height);
+
+
+        //图片的容器的宽高
+        Vector2 size = new Vector2(1600f, 1000f);
+
+        float v2 = temp.x / temp.y;//图片的比率
+
+        if (temp.x > temp.y)//如果图片宽大于高
+        {
+            if (temp.x > size.x)//如果图片宽大于容器的宽
+            {
+                temp.x = size.x;//以容器宽为准
+
+                temp.y = size.x / v2;//把图片高按比例缩小
+
+                if (temp.y > size.y)//如果图片的高还是大于容器的高
+                {
+                    temp.y = size.y;//则以容器的高为标准
+
+                    temp.x = size.y * v2;//容器的高再度计算赋值
+
+                    //一下逻辑同理
+                }
+            }
+            else //如果图片宽小于容器的宽
+            {
+
+                if (temp.y > size.y)//如果图片的高还是大于容器的高
+                {
+                    temp.y = size.y;//则以容器的高为标准
+
+                    temp.x = size.y * v2;//容器的高再度计算赋值
+
+
+                }
+            }
+        }
+        else if (temp.x <= temp.y)//如果图片的高大于宽 
+        {
+            if (temp.y > size.y)//如果图片高大于容器的高
+            {
+                temp.y = size.y;//以容器的高为准
+
+                temp.x = size.y * v2;//重新计算图片的宽
+
+                if (temp.x > size.x)//如果图片的宽还是大于容器的高
+                {
+
+                    temp.x = size.x;//则再次以容器的宽为标准
+
+                    temp.y = size.x / v2;//再以容器的宽计算得到容器的高
+                }
+            }
+            else //如果图片的高小于容器的高
+            {
+                //但是图片的宽大于容器的宽
+                if (temp.x > size.x)
+                {
+                    temp.x = size.x;//以容器的宽为准
+                    temp.y = size.x / v2;//再以容器的宽计算得到容器的高
+                }
+
+            }
+        }
+
+        ShowDaShiJiRawImage.texture = tex;
+       
+        ShowDaShiJiRawImage.rectTransform.sizeDelta = new Vector2(temp.x, temp.y);
+
+        //如果缩放的图片太小，我们就把他放大一点
+
+        ShowDaShiJiRawImage.rectTransform.parent.Find("Text").GetComponent<Text>().text = description;
+        ShowDaShiJiRawImageBtn.transform.DOScale(1f, 0.55f).SetEase(Ease.InOutQuart);
+        ShowDaShiJiRawImageBtn.GetComponent<Image>().DOFade(0f, 0.55f);
     }
 
     public void ChangeState(UIState state)

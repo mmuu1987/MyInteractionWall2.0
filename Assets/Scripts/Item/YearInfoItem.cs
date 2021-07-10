@@ -25,7 +25,8 @@ public class YearInfoItem : MonoBehaviour
     {
         ImageButton.onClick.AddListener((() =>
         {
-            UIControl.Instance.ShowImageFun(RawImage.texture);
+            Debug.Log("button");
+            UIControl.Instance.ShowImageFun(RawImage.texture, new Vector2(3600f, 2224f));
         }));
     }
 

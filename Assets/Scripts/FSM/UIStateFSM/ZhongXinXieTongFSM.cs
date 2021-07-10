@@ -184,7 +184,7 @@ public class ZhongXinXieTongFSM : UIStateFSM
     {
         List<Vector2> temp = new List<Vector2>();
 
-        temp = Common.Sample2D(seed, Common.ContainerWidth * Common.Scale, Common.ContainerHeight, 512f, 50);
+        temp = Common.Sample2D(seed, Common.ContainerWidth * Common.Scale, Common.ContainerHeight, 750f, 50);
 
         Debug.Log("个数是 " + temp.Count);
         return temp;

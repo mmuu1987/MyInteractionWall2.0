@@ -9,18 +9,30 @@ public class TouchEvent : MonoBehaviour,IDragHandler,IBeginDragHandler,IEndDragH
 
 
     public event Action<bool> TouchMoveEvent;
-   
+
+    public event Action<float> DragMoveEvent;
+
+    public event Action OnBeginDragEvent;
+
+
+    public event Action OnEndDragEvent;
+
 
     private Vector2 _beginDragPos;   
     public void OnDrag(PointerEventData eventData)
     {
        //Debug.Log("OnDrag");
+
+       if (DragMoveEvent != null)
+           DragMoveEvent(eventData.delta.x);
     }
 
     public void OnBeginDrag(PointerEventData eventData)
     {
         //Debug.Log("OnBeginDrag");
         _beginDragPos = eventData.position;
+
+        if (OnBeginDragEvent != null) OnBeginDragEvent();
     }
 
     public void OnEndDrag(PointerEventData eventData)
@@ -39,6 +51,8 @@ public class TouchEvent : MonoBehaviour,IDragHandler,IBeginDragHandler,IEndDragH
             if (TouchMoveEvent != null) TouchMoveEvent(true);
             //isLeft = true;
         }
+
+        if (OnEndDragEvent != null) OnEndDragEvent();
         // Debug.Log("OnEndDrag");
     }
 }

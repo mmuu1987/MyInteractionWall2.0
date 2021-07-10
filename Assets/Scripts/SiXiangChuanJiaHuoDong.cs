@@ -91,15 +91,21 @@ public class SiXiangChuanJiaHuoDong : MonoBehaviour
         {
             foreach (Texture2D texture2D in yearsEvent.TexList)
             {
-                RawImage rawImage = Instantiate(ImageIemPrefab, Parent).GetComponent<RawImage>();
+                RawImage rawImage = Instantiate(ImageIemPrefab, Parent).transform.Find("Content").GetComponent<RawImage>();
 
                 rawImage.texture = texture2D;
 
+                Vector2 newSize =
+                    Common.ShowImageFun(new Vector2(texture2D.width, texture2D.height), new Vector2(912.4f, 527.16f));
+
+                rawImage.rectTransform.sizeDelta = newSize;
+
                 _curRawImages.Add(rawImage);
 
-                rawImage.GetComponent<Button>().onClick.AddListener((() =>
+                rawImage.transform.parent.GetComponent<Button>().onClick.AddListener((() =>
                 {
                     ShowRawImage.texture = rawImage.texture;
+                    ShowRawImage.rectTransform.sizeDelta = newSize*4;
                     ShowRawImageParent.rectTransform.DOKill();
                     ShowRawImageParent.rectTransform.DOScale(Vector3.one, 0.35f);
                 }));

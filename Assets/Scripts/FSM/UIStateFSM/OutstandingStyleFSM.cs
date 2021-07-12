@@ -186,7 +186,7 @@ public class OutstandingStyleFSM : UIStateFSM
         _intrHead.sprite = info.headTex;
 
         _intrName.text = info.PersonName;
-
+        Debug.Log(info.Describe);
         _intrDes.text = info.Describe;
     }
 

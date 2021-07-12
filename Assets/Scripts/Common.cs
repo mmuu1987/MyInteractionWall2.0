@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 public static class Common
 {
@@ -228,230 +229,27 @@ public static class Common
         return cells;
     }
 
-    /// <summary>
-    /// 根据图片路径返回图片的字节流byte[]
-    /// </summary>
-    /// <param name="imagePath">图片路径</param>
-    /// <returns>返回的字节流</returns>
-    private static byte[] GetImageByte(string imagePath)
+    
+    
+
+
+    public static Texture2D Resize(Texture2D source, int newWidth, int newHeight)
     {
-        FileStream files = new FileStream(imagePath, FileMode.Open);
-        byte[] imgByte = new byte[files.Length];
-        files.Read(imgByte, 0, imgByte.Length);
-        files.Close();
-        return imgByte;
+        source.filterMode = FilterMode.Point;
+        RenderTexture rt = RenderTexture.GetTemporary(newWidth, newHeight);
+        rt.filterMode = FilterMode.Point;
+        RenderTexture.active = rt;
+        UnityEngine.Graphics.Blit(source, rt);
+        var nTex = new Texture2D(newWidth, newHeight);
+        nTex.ReadPixels(new Rect(0, 0, newWidth, newHeight), 0, 0);
+        nTex.Apply();
+        RenderTexture.active = null;
+        Object.Destroy(source);
+        return nTex;
     }
 
-    /// <summary>
-    /// 缩放图像
-    /// </summary>
-    /// <param name="originalImagePath">图片原始路径</param>
-    /// <param name="width">缩放图的宽</param>
-    /// <param name="height">缩放图的高</param>
-    /// <param name="model">缩放模式</param>
-    /// <param name="size">原始尺寸</param>
-    public static byte [] MakeThumNail(string originalImagePath, int width, int height, string model,out Vector2 size)
-    {
-       Image originalImage = Image.FromFile(originalImagePath);
 
-
-        size.x = originalImage.Width;
-        size.y = originalImage.Height;
-
-        byte[] bytes;
-        MemoryStream ms = new MemoryStream();
-
-        if (width == originalImage.Width && height == originalImage.Height)
-        {
-            originalImage.Save(ms,ImageFormat.Jpeg);
-
-            bytes = ms.GetBuffer();
-            ms.Dispose();
-            return bytes;
-        }
-
-        int thumWidth = width;      //缩略图的宽度
-        int thumHeight = height;    //缩略图的高度
-
-        int x = 0;
-        int y = 0;
-
-        int originalWidth = originalImage.Width;    //原始图片的宽度
-        int originalHeight = originalImage.Height;  //原始图片的高度
-
-        switch (model)
-        {
-            case "HW":      //指定高宽缩放,可能变形
-                break;
-            case "W":       //指定宽度,高度按照比例缩放
-                thumHeight = originalImage.Height * width / originalImage.Width;
-                break;
-            case "H":       //指定高度,宽度按照等比例缩放
-                thumWidth = originalImage.Width * height / originalImage.Height;
-                break;
-            case "Cut":
-                if ((double)originalImage.Width / (double)originalImage.Height > (double)thumWidth / (double)thumHeight)
-                {
-                    originalHeight = originalImage.Height;
-                    originalWidth = originalImage.Height * thumWidth / thumHeight;
-                    y = 0;
-                    x = (originalImage.Width - originalWidth) / 2;
-                }
-                else
-                {
-                    originalWidth = originalImage.Width;
-                    originalHeight = originalWidth * height / thumWidth;
-                    x = 0;
-                    y = (originalImage.Height - originalHeight) / 2;
-                }
-                break;
-            default:
-                break;
-        }
-
-        //新建一个bmp图片
-        System.Drawing.Image bitmap = new System.Drawing.Bitmap(thumWidth, thumHeight);
-
-        //新建一个画板
-        System.Drawing.Graphics graphic = System.Drawing.Graphics.FromImage(bitmap);
-
-        //设置高质量查值法
-        graphic.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.High;
-
-        //设置高质量，低速度呈现平滑程度
-        graphic.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
-
-        //清空画布并以透明背景色填充
-        graphic.Clear(System.Drawing.Color.Transparent);
-
-        //在指定位置并且按指定大小绘制原图片的指定部分
-        graphic.DrawImage(originalImage, new System.Drawing.Rectangle(0, 0, thumWidth, thumHeight), new System.Drawing.Rectangle(x, y, originalWidth, originalHeight), System.Drawing.GraphicsUnit.Pixel);
-
-       
-        try
-        {
-           
-            bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Jpeg);
-
-            bytes = ms.GetBuffer();
-        }
-        catch (Exception ex)
-        {
-            throw ex;
-        }
-        finally
-        {
-            originalImage.Dispose();
-            bitmap.Dispose();
-            graphic.Dispose();
-            ms.Dispose();
-        }
-        return bytes;
-    }
-    /// <summary>
-    /// 缩放图像
-    /// </summary>
-    /// <param name="imageBytes"></param>
-    /// <param name="width">缩放到的宽</param>
-    /// <param name="height">缩放到的高</param>
-    /// <param name="model">缩放模式</param>
-    /// <returns></returns>
-    public static byte[] MakeThumNail(byte[] imageBytes, int width, int height, string model)
-    {
-      
-        MemoryStream ms = new MemoryStream(imageBytes);
-        Image   originalImage = Image.FromStream(ms);
-
-        byte[] bytes;
-         ms = new MemoryStream();
-
-        if (width == originalImage.Width && height == originalImage.Height)
-        {
-            originalImage.Save(ms, ImageFormat.Jpeg);
-
-            bytes = ms.GetBuffer();
-            ms.Dispose();
-            return bytes;
-        }
-
-        int thumWidth = width;      //缩略图的宽度
-        int thumHeight = height;    //缩略图的高度
-
-        int x = 0;
-        int y = 0;
-
-        int originalWidth = originalImage.Width;    //原始图片的宽度
-        int originalHeight = originalImage.Height;  //原始图片的高度
-
-        switch (model)
-        {
-            case "HW":      //指定高宽缩放,可能变形
-                break;
-            case "W":       //指定宽度,高度按照比例缩放
-                thumHeight = originalImage.Height * width / originalImage.Width;
-                break;
-            case "H":       //指定高度,宽度按照等比例缩放
-                thumWidth = originalImage.Width * height / originalImage.Height;
-                break;
-            case "Cut":
-                if ((double)originalImage.Width / (double)originalImage.Height > (double)thumWidth / (double)thumHeight)
-                {
-                    originalHeight = originalImage.Height;
-                    originalWidth = originalImage.Height * thumWidth / thumHeight;
-                    y = 0;
-                    x = (originalImage.Width - originalWidth) / 2;
-                }
-                else
-                {
-                    originalWidth = originalImage.Width;
-                    originalHeight = originalWidth * height / thumWidth;
-                    x = 0;
-                    y = (originalImage.Height - originalHeight) / 2;
-                }
-                break;
-            default:
-                break;
-        }
-
-        //新建一个bmp图片
-        System.Drawing.Image bitmap = new System.Drawing.Bitmap(thumWidth, thumHeight);
-
-        //新建一个画板
-        System.Drawing.Graphics graphic = System.Drawing.Graphics.FromImage(bitmap);
-
-        //设置高质量查值法
-        graphic.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.High;
-
-        //设置高质量，低速度呈现平滑程度
-        graphic.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
-
-        //清空画布并以透明背景色填充
-        graphic.Clear(System.Drawing.Color.Transparent);
-
-        //在指定位置并且按指定大小绘制原图片的指定部分
-        graphic.DrawImage(originalImage, new System.Drawing.Rectangle(0, 0, thumWidth, thumHeight), new System.Drawing.Rectangle(x, y, originalWidth, originalHeight), System.Drawing.GraphicsUnit.Pixel);
-
-
-        try
-        {
-
-            bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Jpeg);
-
-            bytes = ms.GetBuffer();
-        }
-        catch (Exception ex)
-        {
-            throw ex;
-        }
-        finally
-        {
-            originalImage.Dispose();
-            bitmap.Dispose();
-            graphic.Dispose();
-            ms.Dispose();
-        }
-        return bytes;
-    }
+    
 
     public static Vector2 ShowImageFun(Vector2 texSize, Vector2 maxSize)
     {

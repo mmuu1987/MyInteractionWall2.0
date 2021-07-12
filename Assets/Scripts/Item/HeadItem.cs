@@ -66,9 +66,9 @@ public class HeadItem : MonoBehaviour
 
         Debug.Log(info.PersonName + "    " + info.Describe);
 
-       // _personName.text = info.PersonName;
+        _personName.text = info.PersonName;
 
-       // _personInfo.text = info.Describe;
+        _personInfo.text = info.Describe;
 
         _head.sprite = info.headTex;
 

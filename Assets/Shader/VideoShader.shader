@@ -4,7 +4,7 @@
     {
         _MainTex ("Texture", 2D) = "white" {}
         _Mask ("Mask", 2D) = "white" {}
-        _Rnage("Range",Range(0,1)) =0.5
+        _Rnage("Range",Range(0,5)) =0.5
          [Enum(UnityEngine.Rendering.BlendMode)]
          MySrcMode ("SrcMode", Float) = 0
          [Enum(UnityEngine.Rendering.BlendMode)]
@@ -61,11 +61,12 @@
                 fixed4 col = tex2D(_MainTex, i.uv);
                 fixed4 col2 = tex2D(_Mask,i.uv);
 
-                if(col2.a>0)
+               if(col2.a>0)
                 {
-                  col.a=0;
+                  col.xyz=0;
                 }
-
+               
+                col.xyz=col.xyz/_Rnage;
 
                // col.a = 0.45;
 

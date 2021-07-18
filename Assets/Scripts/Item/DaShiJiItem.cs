@@ -12,7 +12,7 @@ public class DaShiJiItem : MonoBehaviour
 
     public RawImage RawImage;
 
-    public RawImage BackImage;
+   // public RawImage BackImage;
 
     public Button Click;
 
@@ -35,23 +35,23 @@ public class DaShiJiItem : MonoBehaviour
     public void Init(YearsEvent yearsEvent,Texture2D texture2D)
     {
         RawImage.texture = texture2D;
-        BackImage.texture = texture2D;
+        //BackImage.texture = texture2D;
         CurYearsEvent = yearsEvent;
     }
 
+    private float _angle = 0f;
+    private float _scale = 1f;
     public void Rotation()
     {
-        if (Math.Abs(BackImage.rectTransform.eulerAngles.y - 180f) < Mathf.Epsilon)
-        {
-            BackImage.rectTransform.DOLocalRotateQuaternion(Quaternion.Euler(new Vector3(0f, 0f, 0f)), 0.55f);
-            RawImage.rectTransform.DOLocalRotateQuaternion(Quaternion.Euler(new Vector3(0f, 180f, 0f)), 0.55f);
-        }
-        else
-        {
-            BackImage.rectTransform.DOLocalRotateQuaternion(Quaternion.Euler(new Vector3(0f, 180f, 0f)), 0.55f);
-            RawImage.rectTransform.DOLocalRotateQuaternion(Quaternion.Euler(new Vector3(0f, 0f, 0f)), 0.55f);
-        }
-       
+        _angle += 180f;
+        _scale *= -1f;
+
+        RawImage.rectTransform.DOLocalRotateQuaternion(Quaternion.Euler(new Vector3(0f, _angle, 0f)), 0.55f);
+        RawImage.rectTransform.DOScaleX(_scale,0.55f);
+
+
+        if (_angle >= 360f) _angle = 0f;
+
     }
     public bool Move(float delta,float width)
     {

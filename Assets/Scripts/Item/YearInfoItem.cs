@@ -25,8 +25,8 @@ public class YearInfoItem : MonoBehaviour
     {
         ImageButton.onClick.AddListener((() =>
         {
-            Debug.Log("button");
-            UIControl.Instance.ShowImageFun(RawImage.texture, new Vector2(3600f, 2224f));
+            //Debug.Log("button");
+            //UIControl.Instance.ShowImageFun(RawImage.texture, new Vector2(3600f, 2224f));
         }));
     }
 
@@ -46,6 +46,7 @@ public class YearInfoItem : MonoBehaviour
         YearText.text = info.Years;
 
         DescriptionText.text = info.Describe;
+
         _tempHeight = -1;
 
         _tempHeight = DescriptionText.preferredHeight + YearText.preferredHeight + 300f;
@@ -184,7 +185,7 @@ public class YearInfoItem : MonoBehaviour
         YearText.raycastTarget = false;
         DescriptionText.rectTransform.parent = parent;
         DescriptionText.raycastTarget = false;
-
+        RawImage.raycastTarget = false;
         RawImage.rectTransform.parent = parent;
 
         parent.sizeDelta = new Vector2(parent.sizeDelta.x,_tempHeight);

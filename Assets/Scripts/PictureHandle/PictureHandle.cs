@@ -144,6 +144,7 @@ public class PictureHandle : MonoBehaviour
         LoadDaShiJi();
         //HandleTextureArry(Texs);
 
+        Resources.UnloadUnusedAssets();
 
         _info = Resources.Load<GameObject>("Prefabs/Info");
         //预制体缩放，后面用来做缩放动画
@@ -624,9 +625,13 @@ public class PictureHandle : MonoBehaviour
 
                 tex.Apply();
 
+                
+                
                 Vector2 newSize = Common.ShowImageFun(new Vector2(tex.width, tex.height), new Vector2(2048, 2048));
 
                 tex = Common.Resize(tex, (int)newSize.x, (int)newSize.y);
+
+                tex.name = fileInfo.Name.Replace(fileInfo.Extension, "");
 
                 yearsEvent.TexList.Add(tex);
                
@@ -647,7 +652,7 @@ public class PictureHandle : MonoBehaviour
                 tex.LoadImage(bytes);
 
                 tex.Apply();
-
+                tex.name = fileInfo.Name.Replace(fileInfo.Extension, "");
                 yearsEvent.TexList.Add(tex);
 
               
@@ -856,7 +861,7 @@ public class PictureHandle : MonoBehaviour
 
                     tex.LoadImage(bytes);
 
-                    tex.Compress(true);
+                   
 
                     tex.Apply();
 
@@ -871,6 +876,7 @@ public class PictureHandle : MonoBehaviour
                     sprite.name = index.ToString();
                     personInfo.headTex = sprite;
 
+                   
                     index++;
 
                 }

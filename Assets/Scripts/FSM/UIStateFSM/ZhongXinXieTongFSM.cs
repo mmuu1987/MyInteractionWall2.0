@@ -117,6 +117,7 @@ public class ZhongXinXieTongFSM : UIStateFSM
             _frontItems.Add(image);
 
             Material mat = Object.Instantiate(_material);
+            image.name = "LogoFront" + n;
             image.SetInfo(-2f , true,  pos,meshRenderer, mat);
             _randPos1.RemoveAt(randPosIndex);
            
@@ -133,6 +134,7 @@ public class ZhongXinXieTongFSM : UIStateFSM
             LogoItem image = Object.Instantiate(logoPrefab, logoParent).GetComponent<LogoItem>();
             _backItems.Add(image);
             Material mat = Object.Instantiate(_material);
+            image.name = "LogoBack" + n;
             image.SetInfo(-2f, false, pos, meshRenderer, mat);
             _randPos2.RemoveAt(randPosIndex);
            
@@ -164,11 +166,11 @@ public class ZhongXinXieTongFSM : UIStateFSM
 
             if (rt.anchoredPosition.x <= -4840f)
             {
-                rt.DOAnchorPos(new Vector2(-2520f,0f), 0.35f);
+                rt.DOAnchorPos(new Vector2(-2304f, 0f), 0.35f);
             }
             else
             {
-                rt.DOAnchorPos(new Vector2(-4864f, 0f), 0.35f);
+                rt.DOAnchorPos(new Vector2(-5270f, 0f), 0.35f);
             }
            
         }));
@@ -176,6 +178,12 @@ public class ZhongXinXieTongFSM : UIStateFSM
         go.transform.Find("Back").GetComponent<Button>().onClick.AddListener((() =>
         {
            Target.ChangeState(UIState.Close);
+
+        }));
+
+        go.transform.Find("BackLeft").GetComponent<Button>().onClick.AddListener((() =>
+        {
+            Target.ChangeState(UIState.Close);
 
         }));
     }
@@ -201,5 +209,14 @@ public class ZhongXinXieTongFSM : UIStateFSM
         {
             logo.gameObject.SetActive(true);
         }
+    }
+
+    public override void Exit()
+    {
+        base.Exit();
+
+       _xieTongWeiHuoDong.GetComponent<RectTransform>().anchoredPosition = new Vector2(-5270f, 0f);
+
+      
     }
 }

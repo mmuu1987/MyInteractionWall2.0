@@ -131,6 +131,11 @@ public class XieTongWeiHuoDong : MonoBehaviour
         }
 
         TitleText.text = _descDic["活动"];
+
+        
+
+        
+
         Description.text = _descDic["简述"];
 
         foreach (Texture2D texture2D in _curYearsEvent.TexList)
@@ -139,11 +144,13 @@ public class XieTongWeiHuoDong : MonoBehaviour
 
             rawImage.texture = texture2D;
 
-            Vector2 newSize =Common.ShowImageFun(new Vector2(texture2D.width, texture2D.height), new Vector2(520f, 400f));
+            Vector2 newSize =Common.ShowImageFun(new Vector2(texture2D.width, texture2D.height), new Vector2(780f, 600f));
 
             rawImage.rectTransform.sizeDelta = newSize;
 
             _curRawImages.Add(rawImage);
+
+            rawImage.transform.Find("Text").gameObject.SetActive(false);
 
             rawImage.transform.parent.GetComponent<Button>().onClick.AddListener((() =>
             {

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
@@ -33,9 +34,19 @@ public class VideoItem : MonoBehaviour
     {
         DirectoryInfo info = new DirectoryInfo(path);
 
-        VideoName = info.Name.Remove(info.Name.Length-4,4);
+        try
+        {
+            VideoName = info.Name.Replace(info.Extension, "");
 
-        VideoNameText.text = VideoName;
+            VideoName = VideoName.Substring(3, VideoName.Length - 1);
+
+            VideoNameText.text = VideoName;
+        }
+        catch (Exception e)
+        {
+            VideoNameText.text = "视频名字不符合规定格式";
+        }
+       
 
         VideoPath = "file://"+ path;
         VideoPlayer.url = path;

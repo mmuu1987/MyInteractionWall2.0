@@ -38,14 +38,20 @@ public class DaShiJianFSM : UIStateFSM
         {
             Target.ChangeState(UIState.Close);
         }));
+
+        go.transform.Find("BackLeft").GetComponent<Button>().onClick.AddListener((() =>
+        {
+            Target.ChangeState(UIState.Close);
+        }));
+
         InitData();
     }
 
     public override void Enter()
     {
-       Parent.gameObject.SetActive(true);
-       Target.StartCoroutine( GetSize());
-       _touchEvent.DragMoveEvent += _touchEvent_DragMoveEvent;
+         Parent.gameObject.SetActive(true);
+        Target.StartCoroutine( GetSize());
+        _touchEvent.DragMoveEvent += _touchEvent_DragMoveEvent;
         _touchEvent.OnBeginDragEvent += _touchEvent_OnBeginDragEvent;
         _touchEvent.OnEndDragEvent += _touchEvent_OnEndDragEvent;
 

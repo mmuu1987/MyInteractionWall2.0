@@ -96,6 +96,8 @@ public class LogoItem : MonoBehaviour,IPointerClickHandler,IPointerDownHandler,I
     public Text Description;
 
 
+    public RawImage ContentRawImage;
+
     private int _siblingIndex;
     private void Awake()
     {
@@ -113,6 +115,7 @@ public class LogoItem : MonoBehaviour,IPointerClickHandler,IPointerDownHandler,I
         Debug.Log("click this name is" +this.name);
 
         if (!_isFront) return;
+        if (eventData.pointerCurrentRaycast.gameObject != this.gameObject) return;
 
         if (Image.sprite == ActiveSprite)
         {
@@ -126,7 +129,7 @@ public class LogoItem : MonoBehaviour,IPointerClickHandler,IPointerDownHandler,I
             Image.sprite = ActiveSprite;
             _isEnableDrag = true;
             ShowDescription(true);
-            Description.text = _yearsEvent.Describe;
+           
             _siblingIndex = RectTransform.GetSiblingIndex();
             RectTransform.SetAsLastSibling();
             
@@ -139,7 +142,7 @@ public class LogoItem : MonoBehaviour,IPointerClickHandler,IPointerDownHandler,I
     {
         if (!_isFront) return;
         // Debug.Log("OnPointerDown this name is" + this.name);
-
+        if (eventData.pointerCurrentRaycast.gameObject != this.gameObject) return;
         _touchMoveTemp = 0;
         _isPress = true;
     }
@@ -148,6 +151,7 @@ public class LogoItem : MonoBehaviour,IPointerClickHandler,IPointerDownHandler,I
     public void OnPointerUp(PointerEventData eventData)
     {
         if (!_isFront) return;
+        if (eventData.pointerCurrentRaycast.gameObject != this.gameObject) return;
         _isPress = false;
         _isEnableDrag = false;
        //f Debug.Log("OnPointerUp this name is" + this.name);
@@ -156,6 +160,7 @@ public class LogoItem : MonoBehaviour,IPointerClickHandler,IPointerDownHandler,I
     public void OnDrag(PointerEventData eventData)
     {
         if (!_isFront) return;
+        if (eventData.pointerCurrentRaycast.gameObject != this.gameObject) return;
         if (_isEnableDrag)
         {
             _dragDelta = eventData.delta;
@@ -325,10 +330,52 @@ public class LogoItem : MonoBehaviour,IPointerClickHandler,IPointerDownHandler,I
 
          Image.material = _material;
 
-        _material.SetTexture("_ShowTex", yearsEvent.TexList[0]); 
+         Texture2D content = null;
+         Description.text = yearsEvent.Describe;
+
+        if (yearsEvent.TexList.Count > 1)
+         {
+             foreach (Texture2D texture2D in yearsEvent.TexList)
+             {
+                 if (texture2D.name.Contains("Logo"))//含有logo的图片规定必须这样命名
+                 {
+                     _material.SetTexture("_ShowTex", texture2D);
+                 }
+                 else
+                 {
+                     content = texture2D;
+                 }
+             }
+         }
+         else
+         {
+            _material.SetTexture("_ShowTex", yearsEvent.TexList[0]);
+         }
+
+         float height = 0f;
+         if (content != null)
+         {
+             ContentRawImage.texture = content;
+             Vector2 oldSize = new Vector2(content.width,content.height);
+             Vector2 newSize = Common.ShowImageFun(oldSize, new Vector2(900f, 500f));
+             ContentRawImage.rectTransform.sizeDelta = newSize;
+             //设置图片的位置，在文字的框的下方10个单位
+             ContentRawImage.rectTransform.anchoredPosition = new Vector2(ContentRawImage.rectTransform.anchoredPosition.x, -Description.preferredHeight-newSize.y/2-10);
+             height = Description.preferredHeight + newSize.y + 20;
+
+         }
+         else
+         {
+             Destroy(ContentRawImage.gameObject);
+
+             height = Description.preferredHeight + 20;
+
+             
+         }
 
 
-         _scale = 1.5f;
+         Description.transform.parent.GetComponent<RectTransform>().sizeDelta = new Vector2(0f, height);
+        _scale = 1.5f;
 
          if (_isFront)
          {
@@ -351,8 +398,8 @@ public class LogoItem : MonoBehaviour,IPointerClickHandler,IPointerDownHandler,I
         RectTransform.sizeDelta = sizeTemp;
 
          _yearsEvent = yearsEvent;
-
-         this.gameObject.SetActive(false);
+        
+        this.gameObject.SetActive(false);
     }
     private Vector2 ShowImage(Vector2 texSize)
     {

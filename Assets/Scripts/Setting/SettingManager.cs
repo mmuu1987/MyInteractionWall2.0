@@ -206,9 +206,9 @@ public class Setting
 
       
 
-        FirstDir = "/大事记/2001-2009";
-        SecondDir =  "/大事记/2010-2019";
-        ThirdDir =  "/大事记/2020";
+        FirstDir = "/公司介绍/大事记/2001-2009";
+        SecondDir = "/公司介绍/大事记/2010-2019";
+        ThirdDir = "/公司介绍/大事记/2020";
 
         IcOne =  "/公司介绍/集团介绍";
         IcTwo = "/公司介绍/基本信息";

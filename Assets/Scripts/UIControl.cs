@@ -187,7 +187,7 @@ public class UIControl : MonoBehaviour
         DicUI.Add(UIState.ZhongXinXieTong, new ZhongXinXieTongFSM(this.transform.Find("ZhongXinXieTongFSM"), LogoGameObject, LogoIteMaterial));
         DicUI.Add(UIState.CompanyIntroduction, new CompanyIntroductionFSM(this.transform.Find("ZhongXinBaoChengFSM/CompanyIntroduction")));
         DicUI.Add(UIState.PrivateHeirs, new PrivateHeirsFSM(this.transform.Find("ZhongXinBaoChengFSM/PrivateHeirs")));
-        DicUI.Add(UIState.OutstandingStyle, new OutstandingStyleFSM(this.transform.Find("ZhongXinBaoChengFSM/OutstandingStyle")));
+        //DicUI.Add(UIState.OutstandingStyle, new OutstandingStyleFSM(this.transform.Find("ZhongXinBaoChengFSM/OutstandingStyle")));
         DicUI.Add(UIState.YingXiangGuan, new YingXiangGuanFSM(this.transform.Find("YinXiangGuanFSM")));
         DicUI.Add(UIState.DaShiJi, new DaShiJianFSM(this.transform.Find("GaoJingZhiDaShiJi"),DaShiJiPrefab,DaShiJiParent.transform));
         DicUI.Add(UIState.Close, new CloseFSM(null));

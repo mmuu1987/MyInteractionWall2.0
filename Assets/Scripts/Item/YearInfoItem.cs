@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
@@ -43,13 +44,21 @@ public class YearInfoItem : MonoBehaviour
     {
         _yearsEvent = info;
 
-        YearText.text = info.Years;
+        try
+        {
+            YearText.text = info.Years.Substring(0, 4);
+        }
+        catch (Exception q)
+        {
+            YearText.text = "年代表述不清";
+        }
+       
 
         DescriptionText.text = info.Describe;
 
         _tempHeight = -1;
 
-        _tempHeight = DescriptionText.preferredHeight + YearText.preferredHeight + 300f;
+        _tempHeight = DescriptionText.preferredHeight + YearText.preferredHeight + 100f;
 
         Vector2 size = this.GetComponent<RectTransform>().sizeDelta;
       
@@ -174,7 +183,7 @@ public class YearInfoItem : MonoBehaviour
 
         RawImage.rectTransform.anchoredPosition = new Vector2(desPos.x, desPos.y - DescriptionText.preferredHeight - 50);
 
-        _tempHeight += (RawImage.rectTransform.sizeDelta.y)-200f;
+        _tempHeight += (RawImage.rectTransform.sizeDelta.y)-100f;
 
         ScrollRect.gameObject.SetActive(true);
 

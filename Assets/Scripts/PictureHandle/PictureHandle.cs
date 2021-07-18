@@ -43,6 +43,9 @@ public class PictureHandle : MonoBehaviour
 
     private List<YearsInfo> _thirdYearInfos = new List<YearsInfo>(); 
 
+    /// <summary>
+    /// 公司介绍的大事记
+    /// </summary>
     public List<YearsEvent> YearsEvents = new List<YearsEvent>();
 
     /// <summary>
@@ -104,33 +107,39 @@ public class PictureHandle : MonoBehaviour
     }
     void Start()
     {
-       // LoadPicture();
+        // LoadPicture();
 
-       var infos1 = LoadPicture(SettingManager.Instance.GetDirectName(Direct.FirstDir,true));
-       var infos2 = LoadPicture(SettingManager.Instance.GetDirectName(Direct.SecondDir,true));
-       var infos3 = LoadPicture(SettingManager.Instance.GetDirectName(Direct.ThirdDir,true));
+        //var infos1 = LoadPicture(SettingManager.Instance.GetDirectName(Direct.FirstDir,true));
+        //var infos2 = LoadPicture(SettingManager.Instance.GetDirectName(Direct.SecondDir,true));
+        //var infos3 = LoadPicture(SettingManager.Instance.GetDirectName(Direct.ThirdDir,true));
 
-      _yesrsInfos.AddRange(infos1);
 
-      _yesrsInfos.AddRange(infos2);
+       
 
-      _yesrsInfos.AddRange(infos3);
+       // _yesrsInfos.AddRange(infos1);
+
+      //_yesrsInfos.AddRange(infos2);
+
+      //_yesrsInfos.AddRange(infos3);
 
      //  LoadTextureAssets();
 
       _pictureIndex = 0;
 
-      _index1 = LoadTextureAssets(infos1);
+      //_index1 = LoadTextureAssets(infos1);
 
-      _index2 = LoadTextureAssets(infos2);
+        //_index2 = LoadTextureAssets(infos2);
 
-      _index3 = LoadTextureAssets(infos3);
+        //_index3 = LoadTextureAssets(infos3);
 
 
         //_index1 = GetYearIndex(1);
         //_index2 = GetYearIndex(2);
         //_index3 = GetYearIndex(3);
 
+
+
+        LoadCompanyIntroductionDaShiJi();
 
 
         LoadCompanyIntroductionPic();
@@ -142,6 +151,7 @@ public class PictureHandle : MonoBehaviour
         LoadSiXiangChunJiaTextures();
         LoadYingSheGuan();
         LoadDaShiJi();
+        
         //HandleTextureArry(Texs);
 
         Resources.UnloadUnusedAssets();
@@ -241,6 +251,17 @@ public class PictureHandle : MonoBehaviour
         {
             if (file.Contains(".meta")) continue;
             DaShiJi.Add(LoadYearEvent(file));
+        }
+    }
+
+    private void LoadCompanyIntroductionDaShiJi()
+    {
+        string frontInfos1 = Application.streamingAssetsPath + "/公司介绍/大事记";
+        string[] frontFiles1 = Directory.GetDirectories(frontInfos1);
+        foreach (string file in frontFiles1)
+        {
+            if (file.Contains(".meta")) continue;
+            YearsEvents.Add(LoadYearEvent(file));
         }
     }
     // Update is called once per frame
@@ -766,12 +787,12 @@ public class PictureHandle : MonoBehaviour
 
     public void LoadPersonInfo()
     {
-        string path1 =  SettingManager.Instance.GetDirectName(Direct.OsOne, true);
-       PersonInfos.Add(LoadPersonInfo(path1));
-       string path2 = SettingManager.Instance.GetDirectName(Direct.OsTwo, true);
-       PersonInfos.Add(LoadPersonInfo(path2));
-       string path3 = SettingManager.Instance.GetDirectName(Direct.OsThree, true);
-       PersonInfos.Add(LoadPersonInfo(path3));
+       // string path1 =  SettingManager.Instance.GetDirectName(Direct.OsOne, true);
+       //PersonInfos.Add(LoadPersonInfo(path1));
+       //string path2 = SettingManager.Instance.GetDirectName(Direct.OsTwo, true);
+       //PersonInfos.Add(LoadPersonInfo(path2));
+       //string path3 = SettingManager.Instance.GetDirectName(Direct.OsThree, true);
+       //PersonInfos.Add(LoadPersonInfo(path3));
 
 
         //荣誉墙

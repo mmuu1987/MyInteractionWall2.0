@@ -123,20 +123,22 @@ public class XieTongWeiHuoDong : MonoBehaviour
 
                 _descDic.Add(temps1[0], temps1[1]);
             }
+
+            TitleText.text = _descDic["活动"];
+
+            Description.text = _descDic["简述"];
+
         }
         catch (Exception e)
         {
+            TitleText.text = "格式不正确";
+
+            Description.text = "格式不正确，请检查txt文档格式是否正确";
 
             Debug.LogError(e.ToString());
         }
 
-        TitleText.text = _descDic["活动"];
-
-        
-
-        
-
-        Description.text = _descDic["简述"];
+       
 
         foreach (Texture2D texture2D in _curYearsEvent.TexList)
         {

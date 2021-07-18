@@ -211,7 +211,7 @@ public class CompanyIntroductionFSM : UIStateFSM
             RectTransform rt = null;
 
 
-            if (i == 0 || i % 2 == 0)
+            if (i == 0 || i % 2 == 0)//在上面的
             {
                 rt = gi.SetInfo(true);
 

@@ -14,9 +14,7 @@ public class DaShiJiItem : MonoBehaviour
 
    // public RawImage BackImage;
 
-    public Button Click;
-
-    public Button BackClick;
+   
 
     public RectTransform RectTransform { get; private set; }
 

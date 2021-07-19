@@ -205,15 +205,12 @@ public class DaShiJianFSM : UIStateFSM
                     DaShiJiItem daShiJiItem = Object.Instantiate(_gridGameObject, _gridTransform).GetComponent<DaShiJiItem>();
 
                     items.Add(daShiJiItem);
-                    daShiJiItem.BackClick.onClick.AddListener((() =>
+                    daShiJiItem.GetComponent<Button>().onClick.AddListener((() =>
                     {
                         UIControl.Instance.ShowDaShiJiImage(texture2D, yearsEvent.Describe);
                     }));
 
-                    daShiJiItem.Click.onClick.AddListener((() =>
-                    {
-                        UIControl.Instance.ShowDaShiJiImage(texture2D, yearsEvent.Describe);
-                    }));
+                   
 
                     daShiJiItem.name = n.ToString();
                     daShiJiItem.Init(yearsEvent,texture2D);

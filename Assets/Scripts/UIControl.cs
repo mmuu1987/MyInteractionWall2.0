@@ -1,9 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.Hosting;
 using DG.Tweening;
 
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Video;
 
 
 public enum UIState
@@ -109,6 +111,8 @@ public class UIControl : MonoBehaviour
     public GameObject DaShiJiPrefab;
 
     public GameObject DaShiJiParent;
+
+    public VideoPlayer BGeffectVideo;
     private void Awake()
     {
         if(Instance!=null)throw new UnityException("已经设置了单例");
@@ -173,8 +177,12 @@ public class UIControl : MonoBehaviour
     }
     
 	// Use this for initialization
-	void Start () 
+	void Start ()
     {
+
+        BGeffectVideo.url = Application.streamingAssetsPath + "/bgEffectVideo.mp4";
+        BGeffectVideo.Play();
+
         HonorWallBtn.onClick.AddListener((ShowHonorWall));
 
         BackLeft.onClick.AddListener((ShowHonorWall));

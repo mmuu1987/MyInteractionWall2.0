@@ -181,9 +181,16 @@ public class ZhongXinXieTongFSM : UIStateFSM
 
         }));
 
-        go.transform.Find("BackLeft").GetComponent<Button>().onClick.AddListener((() =>
+        go.transform.Find("XieTongWeiHuoDong/BackLeft").GetComponent<Button>().onClick.AddListener((() =>
         {
             Target.ChangeState(UIState.Close);
+
+        }));
+
+        go.transform.Find("XieTongWeiHuoDong/goBack").GetComponent<Button>().onClick.AddListener((() =>
+        {
+            RectTransform rt = _xieTongWeiHuoDong.GetComponent<RectTransform>();
+            rt.DOAnchorPos(new Vector2(-5270f, 0f), 0.35f);
 
         }));
     }

@@ -59,23 +59,23 @@
             {
                 // sample the texture
                 fixed4 col = tex2D(_MainTex, i.uv);
-                fixed4 col2 = tex2D(_Mask,i.uv);
+               // fixed4 col2 = tex2D(_Mask,i.uv);
 
-               if(col2.a>0)
-                {
-                  col.xyz=0;
-                }
+               //if(col2.a>0)
+               // {
+               //   col.xyz=0;
+               // }
                
                 col.xyz=col.xyz/_Rnage;
 
                // col.a = 0.45;
 
-                if(col.x+col.y+col.z <=_Rnage)col.a = 0; 
+                //if(col.x+col.y+col.z <=_Rnage)col.a = 0; 
 
-                if(col.a>0)
-                {
-                    col.a=0.25;
-                }
+                //if(col.a>0)
+                //{
+                //    col.a=0.25;
+                //}
                
              
               

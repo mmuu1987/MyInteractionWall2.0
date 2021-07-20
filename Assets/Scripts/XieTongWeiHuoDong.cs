@@ -115,6 +115,8 @@ public class XieTongWeiHuoDong : MonoBehaviour
         {
             string str = _curYearsEvent.Describe;
 
+            str = str.Trim();
+
             string[] temps = str.Split(new[] { "\r\n" }, StringSplitOptions.None);
 
             foreach (string s in temps)
@@ -124,9 +126,9 @@ public class XieTongWeiHuoDong : MonoBehaviour
                 _descDic.Add(temps1[0], temps1[1]);
             }
 
-            TitleText.text = _descDic["活动"];
+            TitleText.text = _descDic["简述"];
 
-            Description.text = _descDic["简述"];
+            Description.text = _descDic["活动"];
 
         }
         catch (Exception e)

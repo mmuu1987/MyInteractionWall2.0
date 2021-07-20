@@ -38,7 +38,7 @@ public class VideoItem : MonoBehaviour
         {
             VideoName = info.Name.Replace(info.Extension, "");
 
-            VideoName = VideoName.Substring(3, VideoName.Length - 1);
+            VideoName = VideoName.Substring(3, VideoName.Length - 1-3);
 
             VideoNameText.text = VideoName;
         }

@@ -232,7 +232,8 @@ public class PictureHandle : MonoBehaviour
 
     private void LoadYingSheGuan()
     {
-        string path = Application.streamingAssetsPath + "/映像馆";
+        string path = Application.streamingAssetsPath + "/影像长廊" +
+            "";
 
         string[] files = Directory.GetFiles(path);
 

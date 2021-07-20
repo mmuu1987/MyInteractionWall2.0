@@ -218,8 +218,8 @@ public class Setting
         IcSix =  "/公司介绍/服务体系";
 
         PhOne =  "/私享传家/品牌介绍";
-        PhTwo =  "/私享传家/尊享服务";
-        PhThree =  "/私享传家/大湾区高净值中心";
+        PhTwo =  "/私享传家/传递致远";
+        PhThree =  "/私享传家/增值服务体系";
         PhFour = "/私享传家/传家视频";
 
         OsOne = "/卓越风采/MDRT荣誉榜";

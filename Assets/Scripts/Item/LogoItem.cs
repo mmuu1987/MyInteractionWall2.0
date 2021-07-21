@@ -328,7 +328,7 @@ public class LogoItem : MonoBehaviour,IPointerClickHandler,IPointerDownHandler,I
 
          _material = material;
 
-         Image.material = _material;
+        // Image.material = _material;
 
          Texture2D content = null;
          Description.text = yearsEvent.Describe;
@@ -339,7 +339,8 @@ public class LogoItem : MonoBehaviour,IPointerClickHandler,IPointerDownHandler,I
              {
                  if (texture2D.name.Contains("Logo.png"))//含有logo的图片规定必须这样命名
                  {
-                     _material.SetTexture("_ShowTex", texture2D);
+                    // _material.SetTexture("_ShowTex", texture2D);
+                    
                  }
                  else
                  {

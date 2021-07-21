@@ -190,7 +190,7 @@ public class LogoItem : MonoBehaviour,IPointerClickHandler,IPointerDownHandler,I
 
                     if (pos.x + size .x/2<= 0 && _tween == null)
                     {
-                        RectTransform.anchoredPosition = RectTransform.anchoredPosition+new Vector2(Common.ContainerWidth*Common.Scale - size.x / 2, 0);
+                        RectTransform.anchoredPosition = RectTransform.anchoredPosition+new Vector2(18633f + size.x / 2, 0);
 
 
                         _orinigalVector2 = RectTransform.anchoredPosition;
@@ -286,7 +286,7 @@ public class LogoItem : MonoBehaviour,IPointerClickHandler,IPointerDownHandler,I
 
             _moveTarget = this.RectTransform.anchoredPosition + dir;
 
-            _material.DOColor(new Color(0.65f, 0.65f,0.65f,0.65f), _animationTime);
+            _material.DOColor(new Color(0.65f, 0.65f,0.65f,0.35f), _animationTime);
 
             DOTween.To(() => CurTarget, x => CurTarget = x, 1, _animationTime);
 
@@ -320,7 +320,7 @@ public class LogoItem : MonoBehaviour,IPointerClickHandler,IPointerDownHandler,I
          _isFront = isFront;
 
          //算出新位置，y轴上下边距不需要有运动
-         _orinigalVector2 = new Vector2(pos.x, (3640 - Common.ContainerHeight) / 2.5f+pos.y);//(pos.y- (3640 - Common.ContainerHeight)/2));
+         _orinigalVector2 = new Vector2(pos.x, pos.y);//(pos.y- (3640 - Common.ContainerHeight)/2));
 
         RectTransform.anchoredPosition = _orinigalVector2;
 
@@ -337,7 +337,7 @@ public class LogoItem : MonoBehaviour,IPointerClickHandler,IPointerDownHandler,I
          {
              foreach (Texture2D texture2D in yearsEvent.TexList)
              {
-                 if (texture2D.name.Contains("Logo"))//含有logo的图片规定必须这样命名
+                 if (texture2D.name.Contains("Logo.png"))//含有logo的图片规定必须这样命名
                  {
                      _material.SetTexture("_ShowTex", texture2D);
                  }
@@ -385,7 +385,7 @@ public class LogoItem : MonoBehaviour,IPointerClickHandler,IPointerDownHandler,I
          else
          {
              _scaleBack = 0.75f;
-             _material.color = new Color(0.65f, 0.65f, 0.65f, 0.5f);
+             _material.color = new Color(0.65f, 0.65f, 0.65f, 0.35f);
          }
 
          float widthScale = 0.15f * _orinigalSize.x;
@@ -407,7 +407,7 @@ public class LogoItem : MonoBehaviour,IPointerClickHandler,IPointerDownHandler,I
 
         // temp.y -= PictureHandle.Instance.LableHeight;
         //图片的容器的宽高
-        Vector2 size = new Vector2(512f, 512f);
+        Vector2 size = new Vector2(1024f, 1024f);
         float v2 = temp.x / temp.y;//图片的比率
 
 

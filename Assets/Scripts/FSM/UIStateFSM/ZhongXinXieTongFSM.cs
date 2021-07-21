@@ -34,9 +34,21 @@ public class ZhongXinXieTongFSM : UIStateFSM
     private float scalar = 2.7f;
 
     private XieTongWeiHuoDong _xieTongWeiHuoDong;
+
+    private List<RectTransform> posList = new List<RectTransform>();
     public ZhongXinXieTongFSM(Transform go,GameObject logoPrefab,Material material) : base(go)
     {
         _material = material;
+
+
+        RectTransform poss = this.Parent.Find("Positions").GetComponent<RectTransform>();
+        RectTransform[] temps = poss.GetComponentsInChildren<RectTransform>();
+
+        foreach (RectTransform rectTransform in temps)
+        {
+            if (rectTransform.parent == poss)
+                posList.Add(rectTransform);
+        }
 
         Button switchBtn = go.transform.Find("Button").GetComponent<Button>();
 
@@ -109,40 +121,73 @@ public class ZhongXinXieTongFSM : UIStateFSM
         //}
         Transform logoParent = go.transform.Find("LogoParent");
         int n = 0;
-        foreach (YearsEvent meshRenderer in PictureHandle.Instance.FrontLogos)
+
+        foreach (Vector2 vector2 in _randPos1)
         {
-            int randPosIndex = Random.Range(0, _randPos1.Count);
-            Vector2 pos = _randPos1[randPosIndex];
+
+            YearsEvent ye = PictureHandle.Instance.FrontLogos[n];
+            Vector2 pos = vector2;
             LogoItem image = Object.Instantiate(logoPrefab, logoParent).GetComponent<LogoItem>();
             _frontItems.Add(image);
 
             Material mat = Object.Instantiate(_material);
             image.name = "LogoFront" + n;
-            image.SetInfo(-2f , true,  pos,meshRenderer, mat);
-            _randPos1.RemoveAt(randPosIndex);
+            image.SetInfo(-2f, true, pos, ye, mat);
            
+
             n++;
             if (n >= PictureHandle.Instance.FrontLogos.Count) n = 0;
-
         }
+        //foreach (YearsEvent meshRenderer in PictureHandle.Instance.FrontLogos)
+        //{
+        //    int randPosIndex = Random.Range(0, _randPos1.Count);
+        //    Vector2 pos = _randPos1[randPosIndex];
+        //    LogoItem image = Object.Instantiate(logoPrefab, logoParent).GetComponent<LogoItem>();
+        //    _frontItems.Add(image);
+
+        //    Material mat = Object.Instantiate(_material);
+        //    image.name = "LogoFront" + n;
+        //    image.SetInfo(-2f , true,  pos,meshRenderer, mat);
+        //    _randPos1.RemoveAt(randPosIndex);
+           
+        //    n++;
+        //    if (n >= PictureHandle.Instance.FrontLogos.Count) n = 0;
+
+        //}
 
         n = 0;
-        foreach (YearsEvent meshRenderer in PictureHandle.Instance.BackLogos)
+
+        foreach (Vector2 vector2 in _randPos2)
         {
-            int randPosIndex = Random.Range(0, _randPos2.Count);
-            Vector2 pos = _randPos2[randPosIndex];
+
+            YearsEvent ye = PictureHandle.Instance.BackLogos[n];
+            Vector2 pos = vector2;
             LogoItem image = Object.Instantiate(logoPrefab, logoParent).GetComponent<LogoItem>();
             _backItems.Add(image);
             Material mat = Object.Instantiate(_material);
             image.name = "LogoBack" + n;
-            image.SetInfo(-2f, false, pos, meshRenderer, mat);
-            _randPos2.RemoveAt(randPosIndex);
+            image.SetInfo(-2f, false, pos, ye, mat);
            
+
             n++;
             if (n >= PictureHandle.Instance.BackLogos.Count) n = 0;
-
-
         }
+        //foreach (YearsEvent meshRenderer in PictureHandle.Instance.BackLogos)
+        //{
+        //    int randPosIndex = Random.Range(0, _randPos2.Count);
+        //    Vector2 pos = _randPos2[randPosIndex];
+        //    LogoItem image = Object.Instantiate(logoPrefab, logoParent).GetComponent<LogoItem>();
+        //    _backItems.Add(image);
+        //    Material mat = Object.Instantiate(_material);
+        //    image.name = "LogoBack" + n;
+        //    image.SetInfo(-2f, false, pos, meshRenderer, mat);
+        //    _randPos2.RemoveAt(randPosIndex);
+           
+        //    n++;
+        //    if (n >= PictureHandle.Instance.BackLogos.Count) n = 0;
+
+
+        //}
 
         for (int i = 0; i < _frontItems.Count; i++)
         {
@@ -197,12 +242,23 @@ public class ZhongXinXieTongFSM : UIStateFSM
 
     private List<Vector2> GetVector2(int seed)
     {
-        List<Vector2> temp = new List<Vector2>();
 
-        temp = Common.Sample2D(seed, Common.ContainerWidth * Common.Scale, Common.ContainerHeight, 750f, 50);
+        List<Vector2> temps = new List<Vector2>();
 
-        Debug.Log("个数是 " + temp.Count);
-        return temp;
+        Vector2 offset = new Vector2(500f,100f);
+        foreach (RectTransform rectTransform in posList)
+        {
+           
+            if(seed==2)
+             temps.Add(rectTransform.anchoredPosition+ offset);
+            else temps.Add(rectTransform.anchoredPosition);
+        }
+        //List<Vector2> temp = new List<Vector2>();
+
+        //temp = Common.Sample2D(seed, Common.ContainerWidth * Common.Scale, Common.ContainerHeight, 750f, 50);
+
+        //Debug.Log("个数是 " + temp.Count);
+        return temps;
     }
 
     public override void Enter()

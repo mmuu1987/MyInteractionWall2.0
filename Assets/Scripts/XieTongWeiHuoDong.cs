@@ -40,6 +40,8 @@ public class XieTongWeiHuoDong : MonoBehaviour
     private List<RawImage> _curRawImages = new List<RawImage>();
 
     private int _curIndex = 0;
+
+   
     // Start is called before the first frame update
     void Start()
     {
@@ -54,6 +56,8 @@ public class XieTongWeiHuoDong : MonoBehaviour
         PreviouseBtn.onClick.AddListener((Previous));
 
         NextBtn.onClick.AddListener((Next));
+
+      
     }
 
     // Update is called once per frame

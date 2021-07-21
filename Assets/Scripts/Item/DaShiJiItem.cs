@@ -4,13 +4,16 @@ using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class DaShiJiItem : MonoBehaviour
 {
 
     public YearsEvent CurYearsEvent;
 
-    public RawImage RawImage;
+    public RawImage ContentImage;
+
+    public RawImage LogoImage;
 
    // public RawImage BackImage;
 
@@ -30,26 +33,90 @@ public class DaShiJiItem : MonoBehaviour
         
     }
 
-    public void Init(YearsEvent yearsEvent,Texture2D texture2D)
+    public void 
+        Init(YearsEvent yearsEvent,Texture2D texture2D)
     {
-        RawImage.texture = texture2D;
+        ContentImage.texture = texture2D;
         //BackImage.texture = texture2D;
         CurYearsEvent = yearsEvent;
     }
 
     private float _angle = 0f;
     private float _scale = 1f;
-    public void Rotation()
+
+   
+
+    private Tween _tween;
+    public void  Rotation()
     {
+
+        if (_tween != null) return;
+           
         _angle += 180f;
         _scale *= -1f;
+           
+        float delay = Random.Range(0.1f, 1f);
+        _tween= ContentImage.rectTransform.DOLocalRotateQuaternion(Quaternion.Euler(new Vector3(0f, _angle, 0f)), 0.55f).SetDelay(delay);
+            //ContentImage.rectTransform.DOScaleX(_scale,0.55f);
 
-        RawImage.rectTransform.DOLocalRotateQuaternion(Quaternion.Euler(new Vector3(0f, _angle, 0f)), 0.55f);
-        RawImage.rectTransform.DOScaleX(_scale,0.55f);
+            LogoImage.rectTransform.DOLocalRotateQuaternion(Quaternion.Euler(new Vector3(0f, _angle + 180, 0f)), 0.55f).SetDelay(delay).OnComplete((
+                () =>
+                {
+                    _angle += 180f;
+                    _scale *= -1f;
+
+                    float randTime = Random.Range(1f, 2f);
+                    ContentImage.rectTransform.DOLocalRotateQuaternion(Quaternion.Euler(new Vector3(0f, _angle, 0f)), 0.55f).SetDelay(randTime);
+                    //ContentImage.rectTransform.DOScaleX(_scale,0.55f);
+
+                    LogoImage.rectTransform.DOLocalRotateQuaternion(Quaternion.Euler(new Vector3(0f, _angle + 180, 0f)), 0.55f).SetDelay(randTime).OnComplete((
+                        () =>
+                        {
+                           
+                            _tween = null;
 
 
-        if (_angle >= 360f) _angle = 0f;
+                        }));
 
+                    if (Math.Abs(_angle - 180f) < Mathf.Epsilon)
+                    {
+                        DoFade(ContentImage.rectTransform, 0f, randTime);
+                        DoFade(LogoImage.rectTransform, 1f, randTime);
+                    }
+                    else
+                    {
+                        DoFade(ContentImage.rectTransform, 1f, randTime);
+                        DoFade(LogoImage.rectTransform, 0f, randTime);
+                    }
+
+                    if (_angle >= 360f) _angle = 0f;
+
+                }));
+            // LogoImage.rectTransform.DOScaleX(_scale*-1f, 0.55f);
+
+            if (Math.Abs(_angle - 180f) < Mathf.Epsilon)
+            {
+                DoFade(ContentImage.rectTransform, 0f,delay);
+                DoFade(LogoImage.rectTransform, 1f, delay);
+            }
+            else
+            {
+                DoFade(ContentImage.rectTransform, 1f, delay);
+                DoFade(LogoImage.rectTransform, 0f, delay);
+            }
+
+         
+
+    }
+
+    private void DoFade(RectTransform rectTransform,float target,float delay)
+    {
+        MaskableGraphic[] maskableGraphics = rectTransform.GetComponentsInChildren<MaskableGraphic>();
+
+        foreach (MaskableGraphic graphic in maskableGraphics)
+        {
+            graphic.DOFade(target, 0.55f).SetDelay(delay);
+        }
     }
     public bool Move(float delta,float width)
     {
@@ -80,4 +147,12 @@ public class DaShiJiItem : MonoBehaviour
 
         return false;
     }
+
+    //public void OnGUI()
+    //{
+    //    if (GUI.Button(new Rect(0f, 0f, 500f, 500f), "test"))
+    //    {
+    //        Rotation();
+    //    }
+    //}
 }

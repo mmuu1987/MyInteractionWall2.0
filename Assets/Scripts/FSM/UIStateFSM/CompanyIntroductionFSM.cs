@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 using XHFrameWork;
@@ -72,6 +73,12 @@ public class CompanyIntroductionFSM : UIStateFSM
     private Transform _gridTransform;
 
     private TouchEvent _touchEvent;
+
+    private Scrollbar _scrollbar;
+
+    private Tween _tween;
+
+    private float _scrollBarValue;
 
     public CompanyIntroductionFSM(Transform go, params  object[] args)
         : base(go)
@@ -173,6 +180,17 @@ public class CompanyIntroductionFSM : UIStateFSM
             UIControl.Instance.ChangeState(UIState.Close);
         }));
 
+
+
+        _scrollbar = go.transform.Find("ZhongXinBaoCheng/Scroll View/Scrollbar Horizontal").GetComponent<Scrollbar>();
+        go.transform.Find("ZhongXinBaoCheng/dir/button").GetComponent<Button>().onClick.AddListener((() =>
+        { 
+            _scrollBarValue = _scrollbar.value;
+          _tween=   DOTween.To(() => _scrollBarValue, x => _scrollBarValue = x, 0, 0.55f).OnComplete((() =>
+          {
+              _tween = null;
+          }));
+        }));
 
 
     }
@@ -326,6 +344,16 @@ public class CompanyIntroductionFSM : UIStateFSM
         Parent.parent.gameObject.SetActive(true);//父级别也要显示
 
      
+    }
+
+    public override void Excute()
+    {
+        base.Excute();
+
+        if (_tween != null)
+        {
+            _scrollbar.value = _scrollBarValue;
+        }
     }
 
     private void Next(GameObject _listener, object _args, params object[] _params)

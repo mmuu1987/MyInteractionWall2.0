@@ -86,15 +86,39 @@ public class DaShiJianFSM : UIStateFSM
     {
         while (true)
         {
-            float time = Random.Range(1, 3);
+            float time = Random.Range(2, 5);
 
-            yield return new WaitForSeconds(time);
+            yield return new WaitForSeconds(5);
 
-            int randIndex = Random.Range(0, items.Count);
+            
 
-            items[randIndex].Rotation();
+            List<DaShiJiItem> temps = new List<DaShiJiItem>();
+
+            foreach (DaShiJiItem item in items)
+            {
+                if (item.RectTransform.anchoredPosition.x > 0 && item.RectTransform.anchoredPosition.x < 7680f)
+                {
+                    temps.Add(item);
+                }
+            }
+
+
+            for (int i = 0; i < 3; i++)
+            {
+                temps[Random.Range(0, temps.Count - 1)].Rotation();
+                yield return null;
+            }
+
+           
+            
+
+         
+
+           
         }
     }
+
+
     private void _touchEvent_DragMoveEvent(float delta)
     {
         //if (delta > 0) return;//目前不允许右滑

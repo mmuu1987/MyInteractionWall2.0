@@ -324,7 +324,7 @@ public class UIControl : MonoBehaviour
         //如果缩放的图片太小，我们就把他放大一点
 
 
-        ShowImageParentBtn.transform.DOScale(1f, 0.55f).SetEase(Ease.InOutQuart);
+        ShowImageParentBtn.transform.DOScale(2f, 0.55f).SetEase(Ease.InOutQuart);
         ShowImageParentBtn.GetComponent<Image>().DOFade(0f, 0.55f);
     }
     public void ShowDaShiJiImage(Texture tex,string description)

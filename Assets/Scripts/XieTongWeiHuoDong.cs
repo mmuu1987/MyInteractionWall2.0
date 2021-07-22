@@ -130,9 +130,9 @@ public class XieTongWeiHuoDong : MonoBehaviour
                 _descDic.Add(temps1[0], temps1[1]);
             }
 
-            TitleText.text = _descDic["简述"];
+            TitleText.text = _descDic["活动"];
 
-            Description.text = _descDic["活动"];
+            Description.text = _descDic["简述"];
 
         }
         catch (Exception e)

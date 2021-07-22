@@ -151,6 +151,8 @@ public class SiXiangChuanJiaHuoDong : MonoBehaviour
                 rawImage.rectTransform.sizeDelta = newSize;
 
                 _curRawImages.Add(item);
+
+                
         }
 
 

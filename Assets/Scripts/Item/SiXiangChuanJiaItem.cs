@@ -2,15 +2,26 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SiXiangChuanJiaItem : MonoBehaviour
 {
 
     private YearsEvent _yearsEvent;
     public RectTransform RectTransform { get; private set; }
+
+    public Button ClickButton;
+
+    private SiXiangChuanJiaShowPicture siXiangChuanJiaShowPicture;
+
     private void Start()
     {
         RectTransform = this.GetComponent<RectTransform>();
+
+        ClickButton.onClick.AddListener((() =>
+        {
+            siXiangChuanJiaShowPicture.ShowInfo(_yearsEvent);
+        }));
     }
     internal bool Move(float delta, float width)
     {
@@ -43,9 +54,11 @@ public class SiXiangChuanJiaItem : MonoBehaviour
         return false;
     }
 
-    internal void SetInfo(YearsEvent yearsEvent)
+    internal void SetInfo(YearsEvent yearsEvent, SiXiangChuanJiaShowPicture showPicture)
     {
         _yearsEvent = yearsEvent;
+
+        siXiangChuanJiaShowPicture = showPicture;
 
     }
 }

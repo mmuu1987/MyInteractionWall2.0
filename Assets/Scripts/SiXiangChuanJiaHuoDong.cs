@@ -20,7 +20,8 @@ public class SiXiangChuanJiaHuoDong : MonoBehaviour
 
     public Image ShowRawImageParent;
 
-   
+
+    public SiXiangChuanJiaShowPicture SiXiangChuanJiaShowPicture;
 
     
 
@@ -113,27 +114,30 @@ public class SiXiangChuanJiaHuoDong : MonoBehaviour
     }
     public void Init(List<YearsEvent> yearsEvents)
     {
-
+       
+        
         foreach (YearsEvent yearsEvent in yearsEvents)
         {
-            foreach (Texture2D texture2D in yearsEvent.TexList)
-            {
+
+            Texture2D texture2D = yearsEvent.TexList[0];
+
                 SiXiangChuanJiaItem item = Instantiate(ImageIemPrefab, Parent).GetComponent<SiXiangChuanJiaItem>();
 
 
-                item.SetInfo(yearsEvent);
+                item.SetInfo(yearsEvent, SiXiangChuanJiaShowPicture);
+
                 RawImage rawImage = item.GetComponent<RawImage>();
 
                 rawImage.texture = texture2D;
 
-                string str = texture2D.name;
+                string str = yearsEvent.Years;
 
                 Text text = item.transform.Find("Text").GetComponent<Text>();
                 try
                 {
                     string[] temp = str.Split(new string[] { "---" }, StringSplitOptions.None);
 
-                    text.text = "<size=35>" + temp[0]+ "</size>"  + "\r\n"+ "<size=45>" + temp[1] + "</size>";
+                    text.text =  temp[1];
                 }
                 catch (Exception e)
                 {
@@ -147,16 +151,6 @@ public class SiXiangChuanJiaHuoDong : MonoBehaviour
                 rawImage.rectTransform.sizeDelta = newSize;
 
                 _curRawImages.Add(item);
-
-
-                rawImage.GetComponent<Button>().onClick.AddListener((() =>
-                {
-                    ShowRawImage.texture = rawImage.texture;
-                    ShowRawImage.rectTransform.sizeDelta = newSize*4;
-                    ShowRawImageParent.rectTransform.DOKill();
-                    ShowRawImageParent.rectTransform.DOScale(Vector3.one, 0.35f);
-                }));
-            }
         }
 
 

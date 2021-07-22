@@ -141,6 +141,8 @@ public class PrivateHeirsFSM : UIStateFSM
 
         go.transform.Find("Scroll View2").GetComponent<SiXiangChuanJiaHuoDong>().Init(PictureHandle.Instance.SiXiangChuanJia_GaoDuanHuoDong);
 
+        
+
 
         go.transform.parent.Find("CloseBtn").GetComponent<Button>().onClick.RemoveAllListeners();
         go.transform.parent.Find("CloseBtn").GetComponent<Button>().onClick.AddListener((() =>

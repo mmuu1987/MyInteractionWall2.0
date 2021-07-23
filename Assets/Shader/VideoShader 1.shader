@@ -4,7 +4,7 @@
     {
         _MainTex ("Texture", 2D) = "white" {}
         _Mask ("Mask", 2D) = "white" {}
-        _Rnage("Range",Range(0,1)) =0.5
+        _Rnage("Range",Range(0,3)) =0.5
          [Enum(UnityEngine.Rendering.BlendMode)]
          MySrcMode ("SrcMode", Float) = 0
          [Enum(UnityEngine.Rendering.BlendMode)]
@@ -69,7 +69,7 @@
 
                 //col.a = 0.45;
 
-                //if(col.x+col.y+col.z <=_Rnage)col.a = 0; 
+                 col.xyz=col.xyz/pow(_Rnage,3);
 
                 if(col.a>0)
                 {

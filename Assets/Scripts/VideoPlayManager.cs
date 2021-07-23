@@ -11,13 +11,19 @@ public class VideoPlayManager : MonoBehaviour
 
     public Slider SliderSmall;
 
-    public Slider BigSlider;
+    public Slider BigSliderLeft;
+
+    public Slider BigSliderRight;
 
    public AudioSource AudioSource;
 
-    public Button FullScaleButton;
+    public Button FullScaleButtonLeft;
 
-    public Button SmallScreenButton;
+  
+
+    public Button SmallScreenButtonLeft;
+
+    public Button SmallScreenButtonRight;
 
     public Button CloseButton;
 
@@ -34,28 +40,50 @@ public class VideoPlayManager : MonoBehaviour
             AudioSource.volume = arg0;
         }));
 
-        BigSlider.onValueChanged.AddListener((arg0 =>
+        BigSliderLeft.onValueChanged.AddListener((arg0 =>
         {
             AudioSource.volume = arg0;
         }));
 
-        FullScaleButton.onClick.AddListener((() =>
+
+        BigSliderRight.onValueChanged.AddListener((arg0 =>
+        {
+            AudioSource.volume = arg0;
+        }));
+
+        FullScaleButtonLeft.onClick.AddListener((() =>
         {
             this._rectTransform.DOAnchorPos(new Vector2(0f, 0f), 0.55f);
             this._rectTransform.DOSizeDelta(new Vector2(7680f, 3240f), 0.55f);
             SliderSmall.gameObject.SetActive(false);
-            FullScaleButton.gameObject.SetActive(false);
-            BigSlider.transform.parent.gameObject.SetActive(true);
+            FullScaleButtonLeft.gameObject.SetActive(false);
+            BigSliderRight.transform.parent.gameObject.SetActive(true);
+            BigSliderLeft.transform.parent.gameObject.SetActive(true);
            
         }));
 
-        SmallScreenButton.onClick.AddListener((() =>
+
+       
+
+        SmallScreenButtonLeft.onClick.AddListener((() =>
         {
             this._rectTransform.DOAnchorPos(new Vector2(-1842f, 0f), 0.55f);
             this._rectTransform.DOSizeDelta(new Vector2(1920, 1080f), 0.55f);
             SliderSmall.gameObject.SetActive(true);
-            FullScaleButton.gameObject.SetActive(true);
-            BigSlider.transform.parent.gameObject.SetActive(false);
+            FullScaleButtonLeft.gameObject.SetActive(true);
+            BigSliderLeft.transform.parent.gameObject.SetActive(false);
+            BigSliderRight.transform.parent.gameObject.SetActive(false);
+
+        }));
+
+        SmallScreenButtonRight.onClick.AddListener((() =>
+        {
+            this._rectTransform.DOAnchorPos(new Vector2(-1842f, 0f), 0.55f);
+            this._rectTransform.DOSizeDelta(new Vector2(1920, 1080f), 0.55f);
+            SliderSmall.gameObject.SetActive(true);
+            FullScaleButtonLeft.gameObject.SetActive(true);
+            BigSliderLeft.transform.parent.gameObject.SetActive(false);
+            BigSliderRight.transform.parent.gameObject.SetActive(false);
 
         }));
 
@@ -77,7 +105,7 @@ public class VideoPlayManager : MonoBehaviour
         
         this.gameObject.SetActive(false);
         SliderSmall.gameObject.SetActive(true);
-        FullScaleButton.gameObject.SetActive(true);
-        BigSlider.transform.parent.gameObject.SetActive(false);
+        FullScaleButtonLeft.gameObject.SetActive(true);
+        BigSliderLeft.transform.parent.gameObject.SetActive(false);
     }
 }

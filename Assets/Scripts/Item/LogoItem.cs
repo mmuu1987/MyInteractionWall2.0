@@ -256,7 +256,7 @@ public class LogoItem : MonoBehaviour,IPointerClickHandler,IPointerDownHandler,I
 
         if (isFront)//如果向屏幕移动
         {
-            Vector2 dir = new Vector2(-512, -100f);
+            Vector2 dir = new Vector2(-962, -100f);
 
             _moveTarget = this.RectTransform.anchoredPosition + dir;
 
@@ -282,7 +282,7 @@ public class LogoItem : MonoBehaviour,IPointerClickHandler,IPointerDownHandler,I
         }
         else
         {
-            Vector2 dir = new Vector3(512, 100f);
+            Vector2 dir = new Vector3(962, 100f);
 
             _moveTarget = this.RectTransform.anchoredPosition + dir;
 
@@ -318,17 +318,18 @@ public class LogoItem : MonoBehaviour,IPointerClickHandler,IPointerDownHandler,I
          
          _moveSpeed = speed;
          _isFront = isFront;
-
-         //算出新位置，y轴上下边距不需要有运动
-         _orinigalVector2 = new Vector2(pos.x, pos.y);//(pos.y- (3640 - Common.ContainerHeight)/2));
+         Image.sprite = DefaultSprite;
+        //算出新位置，y轴上下边距不需要有运动
+        _orinigalVector2 = new Vector2(pos.x, pos.y);//(pos.y- (3640 - Common.ContainerHeight)/2));
 
         RectTransform.anchoredPosition = _orinigalVector2;
 
-         _orinigalSize = ShowImage(new Vector2(yearsEvent.TexList[0].width, yearsEvent.TexList[0].height));
+        // _orinigalSize = ShowImage(new Vector2(yearsEvent.TexList[0].width, yearsEvent.TexList[0].height));
 
+        _orinigalSize = new Vector2(800f,800f);
          _material = material;
 
-        // Image.material = _material;
+         Image.material = _material;
 
          Texture2D content = null;
          Description.text = yearsEvent.Describe;
@@ -337,9 +338,9 @@ public class LogoItem : MonoBehaviour,IPointerClickHandler,IPointerDownHandler,I
          {
              foreach (Texture2D texture2D in yearsEvent.TexList)
              {
-                 if (texture2D.name.Contains("Logo.png"))//含有logo的图片规定必须这样命名
+                 if (texture2D.name.Contains("Logo"))//含有logo的图片规定必须这样命名
                  {
-                    // _material.SetTexture("_ShowTex", texture2D);
+                     _material.SetTexture("_ShowTex", texture2D);
                     
                  }
                  else
@@ -376,7 +377,7 @@ public class LogoItem : MonoBehaviour,IPointerClickHandler,IPointerDownHandler,I
 
 
          Description.transform.parent.GetComponent<RectTransform>().sizeDelta = new Vector2(0f, height);
-        _scale = 1.5f;
+        _scale = 1f;
 
          if (_isFront)
          {

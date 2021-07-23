@@ -130,9 +130,9 @@ public class XieTongWeiHuoDong : MonoBehaviour
                 _descDic.Add(temps1[0], temps1[1]);
             }
 
-            TitleText.text = _descDic["活动"];
+            TitleText.text = _descDic["简述"];
 
-            Description.text = _descDic["简述"];
+            Description.text = _descDic["活动"];
 
         }
         catch (Exception e)
@@ -154,7 +154,7 @@ public class XieTongWeiHuoDong : MonoBehaviour
 
             Vector2 newSize =Common.ShowImageFun(new Vector2(texture2D.width, texture2D.height), new Vector2(780f, 600f));
 
-            rawImage.rectTransform.sizeDelta = newSize;
+            rawImage.rectTransform.sizeDelta = new Vector2(800f, 512f); ;
 
             _curRawImages.Add(rawImage);
 

@@ -124,9 +124,9 @@ public class SiXiangChuanJiaShowPicture : MonoBehaviour
 
             rawImage.texture = texture2D;
 
-            Vector2 newSize = Common.ShowImageFun(new Vector2(texture2D.width, texture2D.height), new Vector2(780f, 600f));
+           // Vector2 newSize = Common.ShowImageFun(new Vector2(texture2D.width, texture2D.height), new Vector2(780f, 600f));
 
-            rawImage.rectTransform.sizeDelta = newSize;
+            rawImage.rectTransform.sizeDelta = new Vector2(800f,512f);
 
             _curRawImages.Add(rawImage);
 

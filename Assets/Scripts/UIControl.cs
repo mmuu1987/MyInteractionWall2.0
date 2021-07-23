@@ -113,6 +113,11 @@ public class UIControl : MonoBehaviour
     public GameObject DaShiJiParent;
 
     public VideoPlayer BGeffectVideo;
+
+    /// <summary>
+    /// 大事记图片显示时间
+    /// </summary>
+    public float ShowTime = 5f;
     private void Awake()
     {
         if(Instance!=null)throw new UnityException("已经设置了单例");
@@ -327,8 +332,14 @@ public class UIControl : MonoBehaviour
         ShowImageParentBtn.transform.DOScale(2f, 0.55f).SetEase(Ease.InOutQuart);
         ShowImageParentBtn.GetComponent<Image>().DOFade(0f, 0.55f);
     }
+
+    private Coroutine _coroutine;
     public void ShowDaShiJiImage(Texture tex,string description)
     {
+
+        if(_coroutine!=null)StopCoroutine(_coroutine);
+        _coroutine = null;
+
         Vector2 temp = new Vector2(tex.width, tex.height);
 
 
@@ -404,6 +415,11 @@ public class UIControl : MonoBehaviour
         ShowDaShiJiRawImage.rectTransform.parent.Find("Text").GetComponent<Text>().text = description;
         ShowDaShiJiRawImageBtn.transform.DOScale(1f, 0.55f).SetEase(Ease.InOutQuart);
         ShowDaShiJiRawImageBtn.GetComponent<Image>().DOFade(0f, 0.55f);
+
+       _coroutine=  StartCoroutine(Common.WaitTime(ShowTime, (() =>
+        {
+            ShowDaShiJiRawImageBtn.onClick.Invoke();
+        })));
     }
 
     public void ChangeState(UIState state)

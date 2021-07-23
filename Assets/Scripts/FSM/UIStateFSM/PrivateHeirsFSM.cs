@@ -60,7 +60,7 @@ public class PrivateHeirsFSM : UIStateFSM
 
 
     private TouchEvent _touchEvent;
-
+    private Text _numberText;
     public PrivateHeirsFSM(Transform go) : base(go)
     {
         _highlights = new List<Image>();
@@ -168,6 +168,7 @@ public class PrivateHeirsFSM : UIStateFSM
 
         _nextTouch = Target.transform.Find("ZhongXinBaoChengFSM/TouchNext"); ;
 
+        _numberText = Target.transform.Find("ZhongXinBaoChengFSM/NumberTip").GetComponent<Text>();
 
         EventTriggerListener.Get(_previous.gameObject).SetEventHandle(EnumTouchEventType.OnClick, Previous);
 
@@ -209,6 +210,7 @@ public class PrivateHeirsFSM : UIStateFSM
             _next.gameObject.SetActive(false);
             _nextTouch.gameObject.SetActive(false);
             _previousTouch.gameObject.SetActive(false);
+            _numberText.text = "1/1";
         }
         else
         {
@@ -217,6 +219,7 @@ public class PrivateHeirsFSM : UIStateFSM
             _next.gameObject.SetActive(true);
             _nextTouch.gameObject.SetActive(true);
             _previousTouch.gameObject.SetActive(false);
+            _numberText.text = "1/" + _curTex.Count;
 
         }
 
@@ -257,6 +260,7 @@ public class PrivateHeirsFSM : UIStateFSM
             _next.gameObject.SetActive(false);
             _nextTouch.gameObject.SetActive(false);
             _previousTouch.gameObject.SetActive(true);
+            _numberText.text = (_curIndex + 1) + "/" + _curTex.Count;
         }
         else
         {
@@ -264,6 +268,7 @@ public class PrivateHeirsFSM : UIStateFSM
             _next.gameObject.SetActive(true);
             _nextTouch.gameObject.SetActive(true);
             _previousTouch.gameObject.SetActive(true);
+            _numberText.text = (_curIndex + 1) + "/" + _curTex.Count;
         }
       
         
@@ -286,6 +291,7 @@ public class PrivateHeirsFSM : UIStateFSM
             _next.gameObject.SetActive(true);
             _nextTouch.gameObject.SetActive(true);
             _previousTouch.gameObject.SetActive(false);
+            _numberText.text = "1/" + _curTex.Count;
         }
         else
         {
@@ -293,6 +299,7 @@ public class PrivateHeirsFSM : UIStateFSM
             _next.gameObject.SetActive(true);
             _nextTouch.gameObject.SetActive(true);
             _previousTouch.gameObject.SetActive(true);
+            _numberText.text = (_curIndex + 1) + "/" + _curTex.Count;
         }
 
     }

@@ -32,7 +32,13 @@ public class YingXiangGuanFSM : UIStateFSM
 
         SetVideoItem();
 
-        go.transform.Find("Back").GetComponent<Button>().onClick.AddListener((() =>
+        go.transform.Find("BackLeft").GetComponent<Button>().onClick.AddListener((() =>
+        {
+            Target.ChangeState(UIState.Close);
+
+        }));
+
+        go.transform.Find("BackRight").GetComponent<Button>().onClick.AddListener((() =>
         {
             Target.ChangeState(UIState.Close);
 

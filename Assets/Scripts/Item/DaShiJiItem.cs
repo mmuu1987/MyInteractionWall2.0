@@ -15,6 +15,10 @@ public class DaShiJiItem : MonoBehaviour
 
     public RawImage LogoImage;
 
+    public Texture2D LogoChuanJia;
+
+    public Texture2D LogoZhongXin;
+
    // public RawImage BackImage;
 
    
@@ -33,10 +37,14 @@ public class DaShiJiItem : MonoBehaviour
         
     }
 
-    public void 
-        Init(YearsEvent yearsEvent,Texture2D texture2D)
+    public void  Init(YearsEvent yearsEvent,Texture2D texture2D)
     {
         ContentImage.texture = texture2D;
+
+        float v = UnityEngine.Random.Range(0, 2);
+
+        LogoImage.texture = v >= 1 ? LogoZhongXin : LogoChuanJia;
+        LogoImage.SetNativeSize();
         //BackImage.texture = texture2D;
         CurYearsEvent = yearsEvent;
     }
@@ -98,6 +106,11 @@ public class DaShiJiItem : MonoBehaviour
             {
                 DoFade(ContentImage.rectTransform, 0f,delay);
                 DoFade(LogoImage.rectTransform, 1f, delay);
+
+                //float v = Random.Range(0, 2);
+
+                //LogoImage.texture = v > 1 ? LogoZhongXin : LogoChuanJia;
+                //LogoImage.SetNativeSize();
             }
             else
             {

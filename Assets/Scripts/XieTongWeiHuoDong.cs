@@ -152,7 +152,7 @@ public class XieTongWeiHuoDong : MonoBehaviour
 
             rawImage.texture = texture2D;
 
-            Vector2 newSize =Common.ShowImageFun(new Vector2(texture2D.width, texture2D.height), new Vector2(780f, 600f));
+            Vector2 newSize =Common.ScaleImageSize(new Vector2(texture2D.width, texture2D.height), new Vector2(780f, 600f));
 
             rawImage.rectTransform.sizeDelta = new Vector2(800f, 512f); ;
 
@@ -164,7 +164,7 @@ public class XieTongWeiHuoDong : MonoBehaviour
             {
                 ShowRawImage.texture = rawImage.texture;
 
-                Vector2 size = Common.ShowImageFun(new Vector2(rawImage.texture.width, rawImage.texture.height),
+                Vector2 size = Common.ScaleImageSize(new Vector2(rawImage.texture.width, rawImage.texture.height),
                     new Vector2(1920, 1080));
                // ShowRawImage.rectTransform.sizeDelta = size;
                 ShowRawImageParent.rectTransform.DOKill();

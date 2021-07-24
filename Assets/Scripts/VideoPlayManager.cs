@@ -67,7 +67,7 @@ public class VideoPlayManager : MonoBehaviour
 
         SmallScreenButtonLeft.onClick.AddListener((() =>
         {
-            this._rectTransform.DOAnchorPos(new Vector2(-1842f, 0f), 0.55f);
+            this._rectTransform.DOAnchorPos(new Vector2(0f, 0f), 0.55f);
             this._rectTransform.DOSizeDelta(new Vector2(1920, 1080f), 0.55f);
             SliderSmall.gameObject.SetActive(true);
             FullScaleButtonLeft.gameObject.SetActive(true);
@@ -78,7 +78,7 @@ public class VideoPlayManager : MonoBehaviour
 
         SmallScreenButtonRight.onClick.AddListener((() =>
         {
-            this._rectTransform.DOAnchorPos(new Vector2(-1842f, 0f), 0.55f);
+            this._rectTransform.DOAnchorPos(new Vector2(0f, 0f), 0.55f);
             this._rectTransform.DOSizeDelta(new Vector2(1920, 1080f), 0.55f);
             SliderSmall.gameObject.SetActive(true);
             FullScaleButtonLeft.gameObject.SetActive(true);

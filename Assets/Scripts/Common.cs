@@ -250,8 +250,13 @@ public static class Common
 
 
     
-
-    public static Vector2 ShowImageFun(Vector2 texSize, Vector2 maxSize)
+    /// <summary>
+    /// 缩放尺寸
+    /// </summary>
+    /// <param name="texSize"></param>
+    /// <param name="maxSize"></param>
+    /// <returns></returns>
+    public static Vector2 ScaleImageSize(Vector2 texSize, Vector2 maxSize)
     {
         Vector2 temp = texSize;
 
@@ -328,6 +333,39 @@ public static class Common
         
 
 
+    }
+
+    /// <summary>
+    /// 缩放尺寸
+    /// </summary>
+    /// <param name="texSize"></param>
+    /// <param name="maxSize"></param>
+    /// <param name="isScale">是否等比例拉伸到最大，如果图片很小的，但是maxSize又很大</param>
+    /// <returns></returns>
+    public static Vector2 ScaleImageSize(Vector2 texSize, Vector2 maxSize,bool isScale)
+    {
+        if (isScale)
+        {
+            while (true)
+            {
+                if (texSize.x < maxSize.x && texSize.y < maxSize.y)
+                {
+                    texSize *= 2;//把图像尺寸放大一倍
+                   
+                }
+                else
+                {
+                    return ScaleImageSize(texSize, maxSize);
+                }
+            }
+            
+          
+        }
+        else
+        {
+          return  ScaleImageSize(texSize, maxSize);
+        }
+        return Vector2.zero;
     }
 
     #region Easing Curves

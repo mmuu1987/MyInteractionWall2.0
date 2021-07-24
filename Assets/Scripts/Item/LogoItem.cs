@@ -98,11 +98,19 @@ public class LogoItem : MonoBehaviour,IPointerClickHandler,IPointerDownHandler,I
 
     public RawImage ContentRawImage;
 
+    public Image BgImage;
+
     private int _siblingIndex;
+
+    private List<MaskableGraphic> _graphics = new List<MaskableGraphic>();
     private void Awake()
     {
         RectTransform = this.GetComponent<RectTransform>();
-       
+
+        MaskableGraphic[] temps = this.GetComponentsInChildren<MaskableGraphic>(true);
+
+        _graphics.AddRange(temps);
+
 
     }
     // Start is called before the first frame update
@@ -117,16 +125,16 @@ public class LogoItem : MonoBehaviour,IPointerClickHandler,IPointerDownHandler,I
         if (!_isFront) return;
         if (eventData.pointerCurrentRaycast.gameObject != this.gameObject) return;
 
-        if (Image.sprite == ActiveSprite)
+        if (BgImage.sprite == ActiveSprite)
         {
-            Image.sprite = DefaultSprite;
+            BgImage.sprite = DefaultSprite;
             _isEnableDrag = false;
             ShowDescription(false);
             RectTransform.SetSiblingIndex(_siblingIndex);
         }
         else
         {
-            Image.sprite = ActiveSprite;
+            BgImage.sprite = ActiveSprite;
             _isEnableDrag = true;
             ShowDescription(true);
            
@@ -164,6 +172,15 @@ public class LogoItem : MonoBehaviour,IPointerClickHandler,IPointerDownHandler,I
         if (_isEnableDrag)
         {
             _dragDelta = eventData.delta;
+        }
+    }
+
+    private void DoFade(float time,float target)
+    {
+        foreach (MaskableGraphic graphic in _graphics)
+        {
+            graphic.DOKill();
+            graphic.DOFade(target, time);
         }
     }
     // Update is called once per frame
@@ -220,10 +237,10 @@ public class LogoItem : MonoBehaviour,IPointerClickHandler,IPointerDownHandler,I
                 }
             }
 
-            if (_tween != null)
-            {
-                _material.SetFloat("_Alpha", CurTarget);
-            }
+            //if (_tween != null)
+            //{
+            //    _material.SetFloat("_Alpha", CurTarget);
+            //}
 
       
     }
@@ -272,10 +289,12 @@ public class LogoItem : MonoBehaviour,IPointerClickHandler,IPointerDownHandler,I
                 _orinigalVector2 = _moveTarget;
 
                 _tween = null;
+
+               
             }));
 
             DOTween.To(() => CurTarget, x => CurTarget = x, 0, _animationTime);
-
+            DoFade(_animationTime, 1f);
             _isFront = true;
 
             RectTransform.SetAsLastSibling();
@@ -290,6 +309,7 @@ public class LogoItem : MonoBehaviour,IPointerClickHandler,IPointerDownHandler,I
 
             DOTween.To(() => CurTarget, x => CurTarget = x, 1, _animationTime);
 
+            DoFade(_animationTime, 0.35f);
             RectTransform.SetAsFirstSibling();
 
             _scaleBack = 0.75f;
@@ -313,6 +333,8 @@ public class LogoItem : MonoBehaviour,IPointerClickHandler,IPointerDownHandler,I
 
     }
 
+
+
     public void SetInfo(float speed,bool isFront, Vector2 pos,YearsEvent yearsEvent,Material material)
     {
          
@@ -323,25 +345,29 @@ public class LogoItem : MonoBehaviour,IPointerClickHandler,IPointerDownHandler,I
         _orinigalVector2 = new Vector2(pos.x, pos.y);//(pos.y- (3640 - Common.ContainerHeight)/2));
 
         RectTransform.anchoredPosition = _orinigalVector2;
-
-        // _orinigalSize = ShowImage(new Vector2(yearsEvent.TexList[0].width, yearsEvent.TexList[0].height));
+        
+       
 
         _orinigalSize = new Vector2(800f,800f);
          _material = material;
 
-         Image.material = _material;
+       //  Image.material = _material;
 
          Texture2D content = null;
          Description.text = yearsEvent.Describe;
-
+        
         if (yearsEvent.TexList.Count > 1)
          {
              foreach (Texture2D texture2D in yearsEvent.TexList)
              {
                  if (texture2D.name.Contains("Logo"))//含有logo的图片规定必须这样命名
                  {
-                     _material.SetTexture("_ShowTex", texture2D);
-                    
+                    Vector2 size = Common.ScaleImageSize(new Vector2(texture2D.width, texture2D.height),new Vector2(800f, 800f),true);
+                    // _material.SetTexture("_ShowTex", texture2D);
+                    Sprite sprite = Sprite.Create(texture2D, new Rect(0f, 0f, texture2D.width, texture2D.height), new Vector2(0.5f, 0.5f));
+
+                    Image.sprite = sprite;
+                    Image.rectTransform.sizeDelta = size;
                  }
                  else
                  {
@@ -351,7 +377,12 @@ public class LogoItem : MonoBehaviour,IPointerClickHandler,IPointerDownHandler,I
          }
          else
          {
-            _material.SetTexture("_ShowTex", yearsEvent.TexList[0]);
+            Texture2D tex = yearsEvent.TexList[0];
+            Vector2 size = Common.ScaleImageSize(new Vector2(tex.width, tex.height), new Vector2(800f, 800f), true);
+            Sprite sprite = Sprite.Create(tex, new Rect(0f, 0f, tex.width, tex.height), new Vector2(0.5f, 0.5f));
+            // _material.SetTexture("_ShowTex", yearsEvent.TexList[0]);
+            Image.sprite = sprite;
+            Image.rectTransform.sizeDelta = size;
          }
 
          float height = 0f;
@@ -359,7 +390,7 @@ public class LogoItem : MonoBehaviour,IPointerClickHandler,IPointerDownHandler,I
          {
              ContentRawImage.texture = content;
              Vector2 oldSize = new Vector2(content.width,content.height);
-             Vector2 newSize = Common.ShowImageFun(oldSize, new Vector2(900f, 500f));
+             Vector2 newSize = Common.ScaleImageSize(oldSize, new Vector2(900f, 500f));
              ContentRawImage.rectTransform.sizeDelta = newSize;
              //设置图片的位置，在文字的框的下方10个单位
              ContentRawImage.rectTransform.anchoredPosition = new Vector2(ContentRawImage.rectTransform.anchoredPosition.x, -Description.preferredHeight-newSize.y/2-10);
@@ -388,11 +419,10 @@ public class LogoItem : MonoBehaviour,IPointerClickHandler,IPointerDownHandler,I
          {
              _scaleBack = 0.75f;
              _material.color = new Color(0.65f, 0.65f, 0.65f, 0.35f);
+             DoFade(1f,0.35f);
          }
 
-         float widthScale = 0.15f * _orinigalSize.x;
-
-         float heightScale = 0.15f * _orinigalSize.y;
+        
 
 
          Vector2 sizeTemp = _orinigalSize * _scale * _scaleBack;
@@ -402,83 +432,6 @@ public class LogoItem : MonoBehaviour,IPointerClickHandler,IPointerDownHandler,I
          _yearsEvent = yearsEvent;
         
         this.gameObject.SetActive(false);
-    }
-    private Vector2 ShowImage(Vector2 texSize)
-    {
-        Vector2 temp = texSize;
-
-        // temp.y -= PictureHandle.Instance.LableHeight;
-        //图片的容器的宽高
-        Vector2 size = new Vector2(1024f, 1024f);
-        float v2 = temp.x / temp.y;//图片的比率
-
-
-        if (temp.x > temp.y)//如果图片宽大于高
-        {
-            if (temp.x > size.x)//如果图片宽大于容器的宽
-            {
-                temp.x = size.x;//以容器宽为准
-
-                temp.y = size.x / v2;//把图片高按比例缩小
-
-                if (temp.y > size.y)//如果图片的高还是大于容器的高
-                {
-                    temp.y = size.y;//则以容器的高为标准
-
-                    temp.x = size.y * v2;//容器的高再度计算赋值
-
-                    //一下逻辑同理
-                }
-            }
-            else //如果图片宽小于容器的宽
-            {
-
-                if (temp.y > size.y)//如果图片的高还是大于容器的高
-                {
-                    temp.y = size.y;//则以容器的高为标准
-
-                    temp.x = size.y * v2;//容器的高再度计算赋值
-
-
-                }
-            }
-        }
-        else if (temp.x <= temp.y)//如果图片的高大于宽 
-        {
-            if (temp.y > size.y)//如果图片高大于容器的高
-            {
-                temp.y = size.y;//以容器的高为准
-
-                temp.x = size.y * v2;//重新计算图片的宽
-
-                if (temp.x > size.x)//如果图片的宽还是大于容器的高
-                {
-
-                    temp.x = size.x;//则再次以容器的宽为标准
-
-                    temp.y = size.x / v2;//再以容器的宽计算得到容器的高
-                }
-            }
-            else //如果图片的高小于容器的高
-            {
-                //但是图片的宽大于容器的宽
-                if (temp.x > size.x)
-                {
-                    temp.x = size.x;//以容器的宽为准
-                    temp.y = size.x / v2;//再以容器的宽计算得到容器的高
-                }
-
-            }
-        }
-
-
-        //   Vector2 realSize =_yearsEvent.PictureIndes
-
-        Vector2 newSize = new Vector2(temp.x, temp.y);
-
-        return newSize;
-
-
     }
     public void Active(bool isActive)
     {

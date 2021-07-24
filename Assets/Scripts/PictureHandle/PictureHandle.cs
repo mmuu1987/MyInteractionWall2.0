@@ -649,7 +649,7 @@ public class PictureHandle : MonoBehaviour
 
                 
                 
-                Vector2 newSize = Common.ShowImageFun(new Vector2(tex.width, tex.height), new Vector2(2048, 2048));
+                Vector2 newSize = Common.ScaleImageSize(new Vector2(tex.width, tex.height), new Vector2(2048, 2048));
 
                 tex = Common.Resize(tex, (int)newSize.x, (int)newSize.y);
 

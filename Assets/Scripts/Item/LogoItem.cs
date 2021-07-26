@@ -312,10 +312,10 @@ public class LogoItem : MonoBehaviour,IPointerClickHandler,IPointerDownHandler,I
             DoFade(_animationTime, 0.35f);
             RectTransform.SetAsFirstSibling();
 
-            _scaleBack = 0.75f;
+            _scaleBack = 0.65f;
             _tween=  this.RectTransform.DOSizeDelta(_orinigalSize * _scale*_scaleBack, _animationTime).SetEase(Ease.InOutQuart).OnComplete((() =>
             {
-                _moveSpeed = -2f;
+                _moveSpeed = -2f*0.65f;
                 _orinigalVector2 = _moveTarget;
                 _tween = null;
             })); 
@@ -338,7 +338,7 @@ public class LogoItem : MonoBehaviour,IPointerClickHandler,IPointerDownHandler,I
     public void SetInfo(float speed,bool isFront, Vector2 pos,YearsEvent yearsEvent,Material material)
     {
          
-         _moveSpeed = speed;
+        
          _isFront = isFront;
          Image.sprite = DefaultSprite;
         //算出新位置，y轴上下边距不需要有运动
@@ -412,12 +412,14 @@ public class LogoItem : MonoBehaviour,IPointerClickHandler,IPointerDownHandler,I
 
          if (_isFront)
          {
-             _scaleBack = 1f;
+             _moveSpeed = speed;
+            _scaleBack = 1f;
              _material.color = new Color(1f,1f,1f,1f);
          }
          else
          {
-             _scaleBack = 0.75f;
+             _moveSpeed = speed*0.65f;
+            _scaleBack = 0.65f;
              _material.color = new Color(0.65f, 0.65f, 0.65f, 0.35f);
              DoFade(1f,0.35f);
          }

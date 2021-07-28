@@ -35,21 +35,33 @@ public class ZhongXinXieTongFSM : UIStateFSM
 
     private XieTongWeiHuoDong _xieTongWeiHuoDong;
 
-    private List<RectTransform> posList = new List<RectTransform>();
+    private List<RectTransform> posLeftList = new List<RectTransform>();
+    private List<RectTransform> posRightList = new List<RectTransform>();
+
+    private RectTransform centeRectTransform;
+
+    private List<LogoItem> logos = new List<LogoItem>();
     public ZhongXinXieTongFSM(Transform go,GameObject logoPrefab,Material material) : base(go)
     {
         _material = material;
 
 
         RectTransform poss = this.Parent.Find("Positions").GetComponent<RectTransform>();
-        RectTransform[] temps = poss.GetComponentsInChildren<RectTransform>();
+        RectTransform[] temps = poss.GetComponentsInChildren<RectTransform>(true);
 
         foreach (RectTransform rectTransform in temps)
         {
             if (rectTransform.parent == poss)
-                posList.Add(rectTransform);
+            {
+                if(rectTransform.name.Contains("left"))
+                    posLeftList.Add(rectTransform);
+                else if(rectTransform.name.Contains("right"))
+                    posRightList.Add(rectTransform);
+                else
+                    centeRectTransform = poss;
+            }
         }
-
+      
         Button switchBtn = go.transform.Find("Button").GetComponent<Button>();
 
         switchBtn.onClick.AddListener((() =>
@@ -81,38 +93,23 @@ public class ZhongXinXieTongFSM : UIStateFSM
             {
                 float delay = 1f;
 
-                item.Move(_isFront);
+               // item.Move(_isFront);
 
                 LogoItem oldItem = _backItems[index];
-                oldItem.Move(!_isFront);
+              //  oldItem.Move(!_isFront);
                 index++;
             }
         }));
       
 
-        List<Vector2> _randPos1 = GetVector2(1);
+        List<Vector2> randPosLeft = GetVector2(true);
 
-        List<Vector2> _randPos2 = GetVector2(2);
+        List<Vector2> randPos2Right = GetVector2(false);
 
-        int k = 2;
+       
 
-
-        if (_randPos2.Count < PictureHandle.Instance.FrontLogos.Count)
-        {
-            _randPos2 = GetVector2(k);
-            k++;
-        }
-        //while (true)
-        //{
-        //    else break;
-        //}
-
-        k++;
-        if (_randPos1.Count < PictureHandle.Instance.BackLogos.Count)
-        {
-            _randPos1 = GetVector2(k);
-            k++;
-        }
+       
+        
 
         //while (true)
         //{
@@ -122,7 +119,7 @@ public class ZhongXinXieTongFSM : UIStateFSM
         Transform logoParent = go.transform.Find("LogoParent");
         int n = 0;
 
-        foreach (Vector2 vector2 in _randPos1)
+        foreach (Vector2 vector2 in randPosLeft)
         {
 
             YearsEvent ye = PictureHandle.Instance.FrontLogos[n];
@@ -131,33 +128,18 @@ public class ZhongXinXieTongFSM : UIStateFSM
             _frontItems.Add(image);
 
             Material mat = Object.Instantiate(_material);
-            image.name = "LogoFront" + n;
+            image.name = "LogoLeft" + n;
             image.SetInfo(-2f, true, pos, ye, mat);
            
 
             n++;
-            if (n >= PictureHandle.Instance.FrontLogos.Count) n = 0;
+            if (n >= PictureHandle.Instance.FrontLogos.Count) break;
         }
-        //foreach (YearsEvent meshRenderer in PictureHandle.Instance.FrontLogos)
-        //{
-        //    int randPosIndex = Random.Range(0, _randPos1.Count);
-        //    Vector2 pos = _randPos1[randPosIndex];
-        //    LogoItem image = Object.Instantiate(logoPrefab, logoParent).GetComponent<LogoItem>();
-        //    _frontItems.Add(image);
-
-        //    Material mat = Object.Instantiate(_material);
-        //    image.name = "LogoFront" + n;
-        //    image.SetInfo(-2f , true,  pos,meshRenderer, mat);
-        //    _randPos1.RemoveAt(randPosIndex);
-           
-        //    n++;
-        //    if (n >= PictureHandle.Instance.FrontLogos.Count) n = 0;
-
-        //}
+       
 
         n = 0;
 
-        foreach (Vector2 vector2 in _randPos2)
+        foreach (Vector2 vector2 in randPos2Right)
         {
 
             YearsEvent ye = PictureHandle.Instance.BackLogos[n];
@@ -165,41 +147,17 @@ public class ZhongXinXieTongFSM : UIStateFSM
             LogoItem image = Object.Instantiate(logoPrefab, logoParent).GetComponent<LogoItem>();
             _backItems.Add(image);
             Material mat = Object.Instantiate(_material);
-            image.name = "LogoBack" + n;
+            image.name = "LogoRight" + n;
             image.SetInfo(-2f, false, pos, ye, mat);
            
 
             n++;
-            if (n >= PictureHandle.Instance.BackLogos.Count) n = 0;
-        }
-        //foreach (YearsEvent meshRenderer in PictureHandle.Instance.BackLogos)
-        //{
-        //    int randPosIndex = Random.Range(0, _randPos2.Count);
-        //    Vector2 pos = _randPos2[randPosIndex];
-        //    LogoItem image = Object.Instantiate(logoPrefab, logoParent).GetComponent<LogoItem>();
-        //    _backItems.Add(image);
-        //    Material mat = Object.Instantiate(_material);
-        //    image.name = "LogoBack" + n;
-        //    image.SetInfo(-2f, false, pos, meshRenderer, mat);
-        //    _randPos2.RemoveAt(randPosIndex);
-           
-        //    n++;
-        //    if (n >= PictureHandle.Instance.BackLogos.Count) n = 0;
-
-
-        //}
-
-        for (int i = 0; i < _frontItems.Count; i++)
-        {
-            _frontItems[i].RectTransform.SetAsLastSibling();
-            _frontItems[i].name = "front "+i;
+            if (n >= PictureHandle.Instance.BackLogos.Count) break;
         }
 
-        for (int i = 0; i < _backItems.Count; i++)
-        {
-            _backItems[i].RectTransform.SetAsFirstSibling();
-            _backItems[i].name = "back " + i;
-        }
+        logos.AddRange(_backItems);
+        logos.AddRange(_frontItems);
+
 
 
         _xieTongWeiHuoDong = go.transform.Find("XieTongWeiHuoDong").GetComponent<XieTongWeiHuoDong>();
@@ -240,19 +198,47 @@ public class ZhongXinXieTongFSM : UIStateFSM
         }));
     }
 
-    private List<Vector2> GetVector2(int seed)
+    private Coroutine _scaleCoroutine;
+    private IEnumerator RangeScale()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(4.6f);
+
+            
+            _backItems.AddRange(_frontItems);
+
+
+            int count = Random.Range(1, 3);
+
+            for (int i = 0; i < count; i++)
+            {
+                LogoItem item = logos[Random.Range(0, logos.Count )];
+
+                item.Scale();
+            }
+        }
+    }
+    private List<Vector2> GetVector2(bool isLeft)
     {
 
         List<Vector2> temps = new List<Vector2>();
 
-        Vector2 offset = new Vector2(500f,100f);
-        foreach (RectTransform rectTransform in posList)
+        if (isLeft)
         {
-           
-            if(seed==2)
-             temps.Add(rectTransform.anchoredPosition+ offset);
-            else temps.Add(rectTransform.anchoredPosition);
+            foreach (RectTransform transform in posLeftList)
+            {
+                temps.Add(transform.anchoredPosition);
+            }
         }
+        else
+        {
+            foreach (RectTransform transform in posRightList)
+            {
+                temps.Add(transform.anchoredPosition);
+            }
+        }
+       
         //List<Vector2> temp = new List<Vector2>();
 
         //temp = Common.Sample2D(seed, Common.ContainerWidth * Common.Scale, Common.ContainerHeight, 750f, 50);
@@ -264,6 +250,8 @@ public class ZhongXinXieTongFSM : UIStateFSM
     public override void Enter()
     {
         base.Enter();
+        if(_scaleCoroutine!=null) Target.StopCoroutine(_scaleCoroutine);
+       _scaleCoroutine = Target.StartCoroutine(RangeScale());
         foreach (LogoItem logo in _frontItems)
         {
             logo.gameObject.SetActive(true);
@@ -277,8 +265,8 @@ public class ZhongXinXieTongFSM : UIStateFSM
     public override void Exit()
     {
         base.Exit();
-
-       _xieTongWeiHuoDong.GetComponent<RectTransform>().anchoredPosition = new Vector2(-5270f, 0f);
+        if (_scaleCoroutine != null) Target.StopCoroutine(_scaleCoroutine);
+        _xieTongWeiHuoDong.GetComponent<RectTransform>().anchoredPosition = new Vector2(-5270f, 0f);
 
       
     }

@@ -67,7 +67,8 @@ public class PictureHandle : MonoBehaviour
 
     public List<string> YingSheGUanList= new List<string>();
 
-
+    public float WidthEditor = 128;
+    public float HeightEditor = 128;
 
     //public List<Texture2D> Texs = new List<Texture2D>();
 
@@ -646,11 +647,12 @@ public class PictureHandle : MonoBehaviour
                 tex.LoadImage(bytes);
 
                 tex.Apply();
-
-                
-                
-                Vector2 newSize = Common.ScaleImageSize(new Vector2(tex.width, tex.height), new Vector2(2048, 2048));
-
+                Vector2 newSize =Vector2.zero;
+#if !UNITY_EDITOR_WIN
+                 newSize = Common.ScaleImageSize(new Vector2(tex.width, tex.height), new Vector2(2048, 2048));
+#else
+                newSize = Common.ScaleImageSize(new Vector2(tex.width, tex.height), new Vector2(WidthEditor, HeightEditor));
+#endif
                 tex = Common.Resize(tex, (int)newSize.x, (int)newSize.y);
 
                 tex.name = fileInfo.Name.Replace(fileInfo.Extension, "");
@@ -672,6 +674,15 @@ public class PictureHandle : MonoBehaviour
                 Texture2D tex = new Texture2D(1024, 1024);
 
                 tex.LoadImage(bytes);
+
+                Vector2 newSize = Vector2.zero;
+#if !UNITY_EDITOR_WIN
+                 newSize = Common.ScaleImageSize(new Vector2(tex.width, tex.height), new Vector2(2048, 2048));
+#else
+                newSize = Common.ScaleImageSize(new Vector2(tex.width, tex.height), new Vector2(WidthEditor, HeightEditor));
+#endif
+                tex = Common.Resize(tex, (int)newSize.x, (int)newSize.y);
+
 
                 tex.Apply();
                 tex.name = fileInfo.Name.Replace(fileInfo.Extension, "");
@@ -766,8 +777,17 @@ public class PictureHandle : MonoBehaviour
 
                     tex.Compress(true);
 
+
                     tex.Apply();
 
+
+                    Vector2 newSize = Vector2.zero;
+#if !UNITY_EDITOR_WIN
+                 newSize = Common.ScaleImageSize(new Vector2(tex.width, tex.height), new Vector2(2048, 2048));
+#else
+                    newSize = Common.ScaleImageSize(new Vector2(tex.width, tex.height), new Vector2(WidthEditor, HeightEditor));
+#endif
+                    tex = Common.Resize(tex, (int)newSize.x, (int)newSize.y);
 
 
                     texs.Add(tex);
@@ -887,7 +907,13 @@ public class PictureHandle : MonoBehaviour
 
                     tex.Apply();
 
-                    tex = Common.Resize(tex, 512, 512);
+                    Vector2 newSize = Vector2.zero;
+#if !UNITY_EDITOR_WIN
+                 newSize = Common.ScaleImageSize(new Vector2(tex.width, tex.height), new Vector2(512, 512));
+#else
+                    newSize = Common.ScaleImageSize(new Vector2(tex.width, tex.height), new Vector2(WidthEditor, HeightEditor));
+#endif
+                    tex = Common.Resize(tex, (int)newSize.x, (int)newSize.y);
 
                     //if (personInfo.PersonName == "谢志红")
                     //    Debug.Log("找到了该人的名字 index is  " + index);

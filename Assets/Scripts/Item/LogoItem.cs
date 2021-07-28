@@ -6,11 +6,12 @@ using UnityEngine;
 using UnityEngine.UI;
 
 using UnityEngine.EventSystems;
+using Random = UnityEngine.Random;
 
 public class LogoItem : MonoBehaviour,IPointerClickHandler,IPointerDownHandler,IPointerUpHandler,IDragHandler
 {
 
-    private float _moveSpeed = 1f;
+    private float _moveSpeed = 0f;
 
     /// <summary>
     /// 速度缓存
@@ -63,7 +64,7 @@ public class LogoItem : MonoBehaviour,IPointerClickHandler,IPointerDownHandler,I
     /// <summary>
     /// 是否是前面的logo
     /// </summary>
-    private bool _isFront = false;
+    private bool _isLeft = false;
     /// <summary>
     /// 分配好的位置
     /// </summary>
@@ -118,29 +119,40 @@ public class LogoItem : MonoBehaviour,IPointerClickHandler,IPointerDownHandler,I
     {
        
     }
+
+    private Coroutine _coroutine;
     public void OnPointerClick(PointerEventData eventData)
     {
         Debug.Log("click this name is" +this.name);
 
-        if (!_isFront) return;
-        if (eventData.pointerCurrentRaycast.gameObject != this.gameObject) return;
+        //if (!_isLeft) return;
+        //if (eventData.pointerCurrentRaycast.gameObject != this.gameObject) return;
 
-        if (BgImage.sprite == ActiveSprite)
+        if (BgImage.gameObject.activeInHierarchy)
         {
-            BgImage.sprite = DefaultSprite;
+            if (DefaultSprite != null)
+                BgImage.sprite = DefaultSprite;
+            else
+            {
+                BgImage.gameObject.SetActive(false);
+            }
             _isEnableDrag = false;
             ShowDescription(false);
             RectTransform.SetSiblingIndex(_siblingIndex);
+            if (_coroutine != null) StopCoroutine(_coroutine);
         }
         else
         {
+            BgImage.gameObject.SetActive(true);
             BgImage.sprite = ActiveSprite;
             _isEnableDrag = true;
             ShowDescription(true);
            
             _siblingIndex = RectTransform.GetSiblingIndex();
             RectTransform.SetAsLastSibling();
-            
+
+            if(_coroutine!=null)StopCoroutine(_coroutine);
+            _coroutine= StartCoroutine(Revert());
             //显示信息
         }
        
@@ -148,9 +160,9 @@ public class LogoItem : MonoBehaviour,IPointerClickHandler,IPointerDownHandler,I
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        if (!_isFront) return;
+        //if (!_isLeft) return;
         // Debug.Log("OnPointerDown this name is" + this.name);
-        if (eventData.pointerCurrentRaycast.gameObject != this.gameObject) return;
+       // if (eventData.pointerCurrentRaycast.gameObject != this.gameObject) return;
         _touchMoveTemp = 0;
         _isPress = true;
     }
@@ -158,8 +170,8 @@ public class LogoItem : MonoBehaviour,IPointerClickHandler,IPointerDownHandler,I
     
     public void OnPointerUp(PointerEventData eventData)
     {
-        if (!_isFront) return;
-        if (eventData.pointerCurrentRaycast.gameObject != this.gameObject) return;
+      //  if (!_isLeft) return;
+        //if (eventData.pointerCurrentRaycast.gameObject != this.gameObject) return;
         _isPress = false;
         _isEnableDrag = false;
        //f Debug.Log("OnPointerUp this name is" + this.name);
@@ -167,8 +179,8 @@ public class LogoItem : MonoBehaviour,IPointerClickHandler,IPointerDownHandler,I
 
     public void OnDrag(PointerEventData eventData)
     {
-        if (!_isFront) return;
-        if (eventData.pointerCurrentRaycast.gameObject != this.gameObject) return;
+      //  if (!_isLeft) return;
+       // if (eventData.pointerCurrentRaycast.gameObject != this.gameObject) return;
         if (_isEnableDrag)
         {
             _dragDelta = eventData.delta;
@@ -201,16 +213,16 @@ public class LogoItem : MonoBehaviour,IPointerClickHandler,IPointerDownHandler,I
             {
 
 
-                if (!_isPress && Math.Abs(_moveSpeed) > Mathf.Epsilon) 
+                if (!_isPress) 
                 {
                     RectTransform.anchoredPosition = Vector2.Lerp(pos, _orinigalVector2, Time.deltaTime * 1f);
 
                     if (pos.x + size .x/2<= 0 && _tween == null)
                     {
-                        RectTransform.anchoredPosition = RectTransform.anchoredPosition+new Vector2(18633f + size.x / 2, 0);
+                       // RectTransform.anchoredPosition = RectTransform.anchoredPosition+new Vector2(18633f + size.x / 2, 0);
 
 
-                        _orinigalVector2 = RectTransform.anchoredPosition;
+                      //  _orinigalVector2 = RectTransform.anchoredPosition;
 
                     }
                 }
@@ -245,10 +257,35 @@ public class LogoItem : MonoBehaviour,IPointerClickHandler,IPointerDownHandler,I
       
     }
 
+    private IEnumerator Revert()
+    {
+        yield return new WaitForSeconds(10f);
+
+        if (DefaultSprite != null)
+            BgImage.sprite = DefaultSprite;
+        else
+        {
+            BgImage.gameObject.SetActive(false);
+        }
+        _isEnableDrag = false;
+        ShowDescription(false);
+        RectTransform.SetSiblingIndex(_siblingIndex);
+    }
+
     private void ShowDescription(bool isShow)
     {
         if (isShow)
         {
+            Vector2 pos = DescriptionImage.rectTransform.anchoredPosition;
+            if (RectTransform.anchoredPosition.x + 1600 > 3840f)
+            {
+                DescriptionImage.rectTransform.anchoredPosition = new Vector2(-880f, pos.y);
+            }
+            else
+            {
+                DescriptionImage.rectTransform.anchoredPosition = new Vector2(880f, pos.y);
+            }
+            
             DescriptionImage.color = new Color(1,1,1,0);
             DescriptionImage.gameObject.SetActive(true);
             DescriptionImage.DOFade(1f, 0.35f);
@@ -295,7 +332,7 @@ public class LogoItem : MonoBehaviour,IPointerClickHandler,IPointerDownHandler,I
 
             DOTween.To(() => CurTarget, x => CurTarget = x, 0, _animationTime);
             DoFade(_animationTime, 1f);
-            _isFront = true;
+            _isLeft = true;
 
             RectTransform.SetAsLastSibling();
         }
@@ -319,7 +356,7 @@ public class LogoItem : MonoBehaviour,IPointerClickHandler,IPointerDownHandler,I
                 _orinigalVector2 = _moveTarget;
                 _tween = null;
             })); 
-            _isFront = false;
+            _isLeft = false;
         }
 
 
@@ -333,25 +370,39 @@ public class LogoItem : MonoBehaviour,IPointerClickHandler,IPointerDownHandler,I
 
     }
 
+    public void Scale()
+    {
+        if (_tween == null)
+        {
+            RectTransform.SetAsLastSibling();
+            RectTransform.DOScale(Vector3.one * 1.35f, 0.35f).SetEase(Ease.InOutQuad).SetDelay(Random.Range(0f, 1f)).OnComplete((() =>
+            {
+                RectTransform.DOScale(Vector3.one, 0.35f).SetEase(Ease.InOutQuad).SetDelay(Random.Range(1f, 2.5f)).OnComplete((() =>
+                {
+                    RectTransform.SetSiblingIndex(_siblingIndex);
+                    _tween = null;
+                }));
+            }));
+        }
+    }
 
-
-    public void SetInfo(float speed,bool isFront, Vector2 pos,YearsEvent yearsEvent,Material material)
+    public void SetInfo(float speed,bool isLeft, Vector2 pos,YearsEvent yearsEvent,Material material)
     {
          
         
-         _isFront = isFront;
-         Image.sprite = DefaultSprite;
+         _isLeft = isLeft;
+        // Image.sprite = DefaultSprite;
         //算出新位置，y轴上下边距不需要有运动
-        _orinigalVector2 = new Vector2(pos.x, pos.y);//(pos.y- (3640 - Common.ContainerHeight)/2));
+        _orinigalVector2 = pos;//(pos.y- (3640 - Common.ContainerHeight)/2));
 
         RectTransform.anchoredPosition = _orinigalVector2;
         
        
 
-        _orinigalSize = new Vector2(800f,800f);
+         _orinigalSize = new Vector2(800f,800f);
          _material = material;
 
-       //  Image.material = _material;
+         Image.material = _material;
 
          Texture2D content = null;
          Description.text = yearsEvent.Describe;
@@ -362,12 +413,12 @@ public class LogoItem : MonoBehaviour,IPointerClickHandler,IPointerDownHandler,I
              {
                  if (texture2D.name.Contains("Logo"))//含有logo的图片规定必须这样命名
                  {
-                    Vector2 size = Common.ScaleImageSize(new Vector2(texture2D.width, texture2D.height),new Vector2(800f, 800f),true);
+                   // Vector2 size = Common.ScaleImageSize(new Vector2(texture2D.width, texture2D.height),new Vector2(800f, 800f),true);
                     // _material.SetTexture("_ShowTex", texture2D);
                     Sprite sprite = Sprite.Create(texture2D, new Rect(0f, 0f, texture2D.width, texture2D.height), new Vector2(0.5f, 0.5f));
 
                     Image.sprite = sprite;
-                    Image.rectTransform.sizeDelta = size;
+                   // Image.rectTransform.sizeDelta = size;
                  }
                  else
                  {
@@ -378,11 +429,11 @@ public class LogoItem : MonoBehaviour,IPointerClickHandler,IPointerDownHandler,I
          else
          {
             Texture2D tex = yearsEvent.TexList[0];
-            Vector2 size = Common.ScaleImageSize(new Vector2(tex.width, tex.height), new Vector2(800f, 800f), true);
+           // Vector2 size = Common.ScaleImageSize(new Vector2(tex.width, tex.height), new Vector2(800f, 800f), true);
             Sprite sprite = Sprite.Create(tex, new Rect(0f, 0f, tex.width, tex.height), new Vector2(0.5f, 0.5f));
             // _material.SetTexture("_ShowTex", yearsEvent.TexList[0]);
             Image.sprite = sprite;
-            Image.rectTransform.sizeDelta = size;
+           // Image.rectTransform.sizeDelta = size;
          }
 
          float height = 0f;
@@ -410,7 +461,7 @@ public class LogoItem : MonoBehaviour,IPointerClickHandler,IPointerDownHandler,I
          Description.transform.parent.GetComponent<RectTransform>().sizeDelta = new Vector2(0f, height);
         _scale = 1f;
 
-         if (_isFront)
+         if (_isLeft)
          {
              _moveSpeed = speed;
             _scaleBack = 1f;
@@ -424,12 +475,12 @@ public class LogoItem : MonoBehaviour,IPointerClickHandler,IPointerDownHandler,I
              DoFade(1f,0.35f);
          }
 
-        
 
 
-         Vector2 sizeTemp = _orinigalSize * _scale * _scaleBack;
+         _moveSpeed = 0f;
+        Vector2 sizeTemp = _orinigalSize * _scale * _scaleBack;
 
-        RectTransform.sizeDelta = sizeTemp;
+        //RectTransform.sizeDelta = sizeTemp;
 
          _yearsEvent = yearsEvent;
         

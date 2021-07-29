@@ -41,12 +41,19 @@ public class ZhongXinXieTongFSM : UIStateFSM
     private RectTransform centeRectTransform;
 
     private List<LogoItem> logos = new List<LogoItem>();
+
+    private TouchMove _touchMove;
     public ZhongXinXieTongFSM(Transform go,GameObject logoPrefab,Material material) : base(go)
     {
         _material = material;
 
 
+        
+
         RectTransform poss = this.Parent.Find("Positions").GetComponent<RectTransform>();
+
+        _touchMove = this.Parent.Find("LogoParent").GetComponent<TouchMove>();
+
         RectTransform[] temps = poss.GetComponentsInChildren<RectTransform>(true);
 
         foreach (RectTransform rectTransform in temps)
@@ -133,7 +140,14 @@ public class ZhongXinXieTongFSM : UIStateFSM
            
 
             n++;
-            if (n >= PictureHandle.Instance.FrontLogos.Count) break;
+            if (n >= PictureHandle.Instance.FrontLogos.Count)
+            {
+                if (image.RectTransform.anchoredPosition.x < 7680f / -2)
+                {
+                    _touchMove.MaxRight = 7680f / -2 - image.RectTransform.anchoredPosition.x;
+                }
+                break;
+            }
         }
        
 
@@ -152,7 +166,14 @@ public class ZhongXinXieTongFSM : UIStateFSM
            
 
             n++;
-            if (n >= PictureHandle.Instance.BackLogos.Count) break;
+            if (n >= PictureHandle.Instance.BackLogos.Count)
+            {
+                if (image.RectTransform.anchoredPosition.x > 7680f / 2)
+                {
+                    _touchMove.MaxLeft =  image.RectTransform.anchoredPosition.x - 7680f /2 + image.RectTransform.sizeDelta.x/2 ;
+                }
+                break;
+            }
         }
 
         logos.AddRange(_backItems);

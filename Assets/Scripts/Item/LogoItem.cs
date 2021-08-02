@@ -370,18 +370,38 @@ public class LogoItem : MonoBehaviour,IPointerClickHandler,IPointerDownHandler,I
 
     }
 
-    public void Scale()
+    public void Scale(float dis)
     {
-        if (_tween == null)
+        if (_tween != null) return;
+        bool isScale = false;
+        if (_isLeft)
         {
-            RectTransform.SetAsLastSibling();
-            RectTransform.DOScale(Vector3.one * 1.35f, 0.35f).SetEase(Ease.InOutQuad).SetDelay(Random.Range(0f, 1f)).OnComplete((() =>
+            if (-dis <= RectTransform.anchoredPosition.x)
             {
-                RectTransform.DOScale(Vector3.one, 0.35f).SetEase(Ease.InOutQuad).SetDelay(Random.Range(1f, 2.5f)).OnComplete((() =>
-                {
-                    RectTransform.SetSiblingIndex(_siblingIndex);
-                    _tween = null;
-                }));
+                isScale = true;
+            }
+        }
+        else
+        {
+            if(RectTransform.anchoredPosition.x<=dis)
+            {
+                isScale = true;
+            }
+        }
+
+        if (isScale)
+        {
+
+            _tween= RectTransform.DOScale(Vector3.one * 0.65f, 0.35f).SetEase(Ease.InQuad).OnComplete((() =>
+            {
+                RectTransform.DOScale(Vector3.one * 1.15f, 0.35f).SetEase(Ease.OutQuad).OnComplete((() =>
+                  {
+                      RectTransform.DOScale(Vector3.one * 1f, 0.35f).SetEase(Ease.InOutQuad).OnComplete((() =>
+                      {
+                          _tween = null;
+                      }));
+
+                  }));
             }));
         }
     }

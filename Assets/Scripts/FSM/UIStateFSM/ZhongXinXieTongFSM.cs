@@ -219,25 +219,21 @@ public class ZhongXinXieTongFSM : UIStateFSM
         }));
     }
 
+    private float _durDis = 0f;
     private Coroutine _scaleCoroutine;
-    private IEnumerator RangeScale()
+    private Tween _figure;
+    private IEnumerator Scale()
     {
         while (true)
         {
-            yield return new WaitForSeconds(4.6f);
+            yield return new WaitForSeconds(6f);
 
-            
-            _backItems.AddRange(_frontItems);
-
-
-            int count = Random.Range(1, 3);
-
-            for (int i = 0; i < count; i++)
+            _durDis = 0f;
+            _figure= DOTween.To(() => _durDis, x => _durDis = x, 3840f, 1f).SetEase(Ease.InOutQuad).OnComplete(() =>
             {
-                LogoItem item = logos[Random.Range(0, logos.Count )];
+                _figure = null;
+            });
 
-                item.Scale();
-            }
         }
     }
     private List<Vector2> GetVector2(bool isLeft)
@@ -272,7 +268,7 @@ public class ZhongXinXieTongFSM : UIStateFSM
     {
         base.Enter();
         if(_scaleCoroutine!=null) Target.StopCoroutine(_scaleCoroutine);
-       _scaleCoroutine = Target.StartCoroutine(RangeScale());
+       _scaleCoroutine = Target.StartCoroutine(Scale());
         foreach (LogoItem logo in _frontItems)
         {
             logo.gameObject.SetActive(true);
@@ -281,6 +277,20 @@ public class ZhongXinXieTongFSM : UIStateFSM
         {
             logo.gameObject.SetActive(true);
         }
+    }
+
+    public override void Excute()
+    {
+        base.Excute();
+
+        if (_figure != null)
+        {
+            foreach (LogoItem logoItem in logos)
+            {
+                logoItem.Scale(_durDis);
+            }
+        }
+
     }
 
     public override void Exit()

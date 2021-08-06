@@ -391,12 +391,15 @@ public class LogoItem : MonoBehaviour,IPointerClickHandler,IPointerDownHandler,I
 
         if (isScale)
         {
-
-            _tween= RectTransform.DOScale(Vector3.one * 0.65f, 0.35f).SetEase(Ease.InQuad).OnComplete((() =>
+            float height = RectTransform.anchoredPosition.y;
+            RectTransform.DOAnchorPosY(height*0.65f, 0.35f);
+            _tween = RectTransform.DOScale(Vector3.one * 0.65f, 0.35f).SetEase(Ease.InQuad).OnComplete((() =>
             {
+                RectTransform.DOAnchorPosY(height*1.15f, 0.35f);
                 RectTransform.DOScale(Vector3.one * 1.15f, 0.35f).SetEase(Ease.OutQuad).OnComplete((() =>
-                  {
-                      RectTransform.DOScale(Vector3.one * 1f, 0.35f).SetEase(Ease.InOutQuad).OnComplete((() =>
+                {
+                    RectTransform.DOAnchorPosY(height, 0.35f);
+                    RectTransform.DOScale(Vector3.one * 1f, 0.35f).SetEase(Ease.InOutQuad).OnComplete((() =>
                       {
                           _tween = null;
                       }));

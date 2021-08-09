@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 
 public class TouchEvent : MonoBehaviour,IDragHandler,IBeginDragHandler,IEndDragHandler
 {
-
+    public bool IsEnable = true;
 
     public event Action<bool> TouchMoveEvent;
 
@@ -21,6 +21,7 @@ public class TouchEvent : MonoBehaviour,IDragHandler,IBeginDragHandler,IEndDragH
     private Vector2 _beginDragPos;   
     public void OnDrag(PointerEventData eventData)
     {
+        if (!IsEnable) return;
        //Debug.Log("OnDrag");
 
        if (DragMoveEvent != null)
@@ -29,6 +30,7 @@ public class TouchEvent : MonoBehaviour,IDragHandler,IBeginDragHandler,IEndDragH
 
     public void OnBeginDrag(PointerEventData eventData)
     {
+        if (!IsEnable) return;
         //Debug.Log("OnBeginDrag");
         _beginDragPos = eventData.position;
 
@@ -37,6 +39,8 @@ public class TouchEvent : MonoBehaviour,IDragHandler,IBeginDragHandler,IEndDragH
 
     public void OnEndDrag(PointerEventData eventData)
     {
+        if (!IsEnable) return;
+
         Vector2 pos = eventData.position;
 
         if (pos.x > _beginDragPos.x)

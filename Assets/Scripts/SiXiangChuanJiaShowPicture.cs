@@ -37,6 +37,8 @@ public class SiXiangChuanJiaShowPicture : MonoBehaviour
     private RectTransform _rectTransform;
 
     public Button GoBackButton;
+
+    public bool IsRestSize = true;
     // Start is called before the first frame update
     void Start()
     {
@@ -126,6 +128,7 @@ public class SiXiangChuanJiaShowPicture : MonoBehaviour
 
            // Vector2 newSize = Common.ShowImageFun(new Vector2(texture2D.width, texture2D.height), new Vector2(780f, 600f));
 
+           if(IsRestSize)
             rawImage.rectTransform.sizeDelta = new Vector2(800f,512f);
 
             _curRawImages.Add(rawImage);

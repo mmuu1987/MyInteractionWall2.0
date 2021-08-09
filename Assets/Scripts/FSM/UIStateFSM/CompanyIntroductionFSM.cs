@@ -334,13 +334,13 @@ public class CompanyIntroductionFSM : UIStateFSM
 
         _next = Target.transform.Find("ZhongXinBaoChengFSM/Next");
 
-       _previousTouch = Target.transform.Find("ZhongXinBaoChengFSM/TouchPrevious"); 
+        _previousTouch = Target.transform.Find("ZhongXinBaoChengFSM/TouchPrevious"); 
 
-       _nextTouch = Target.transform.Find("ZhongXinBaoChengFSM/TouchNext");
+        _nextTouch = Target.transform.Find("ZhongXinBaoChengFSM/TouchNext");
 
-       _numberText = Target.transform.Find("ZhongXinBaoChengFSM/NumberTip").GetComponent<Text>();
+        _numberText = Target.transform.Find("ZhongXinBaoChengFSM/NumberTip").GetComponent<Text>();
 
-       EventTriggerListener.Get(_previous.gameObject).SetEventHandle(EnumTouchEventType.OnClick, Previous);
+        EventTriggerListener.Get(_previous.gameObject).SetEventHandle(EnumTouchEventType.OnClick, Previous);
 
         EventTriggerListener.Get(_next.gameObject).SetEventHandle(EnumTouchEventType.OnClick, Next);
 

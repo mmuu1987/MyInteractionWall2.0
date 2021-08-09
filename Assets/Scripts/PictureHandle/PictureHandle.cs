@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using System.Runtime.Hosting;
 using System.Text;
 using DG.Tweening;
 using Microsoft.Win32.SafeHandles;
@@ -96,6 +97,11 @@ public class PictureHandle : MonoBehaviour
     public int LableHeight = 10;//文字占有高度像素单位
 
 
+    public List<CompanyInfo> CompanyAllTexList { get; set; }
+
+    public List<CompanyInfo> PrivateHeirsAllTexList;
+
+    public List<CompanyInfo> XieTongJieShao;
     private void Awake()
     {
         if (Instance != null) throw new UnityException("单例错误");
@@ -153,6 +159,7 @@ public class PictureHandle : MonoBehaviour
         LoadYingSheGuan();
         LoadDaShiJi();
         
+        LoadXieTongJieShao();
         //HandleTextureArry(Texs);
 
         Resources.UnloadUnusedAssets();
@@ -203,6 +210,18 @@ public class PictureHandle : MonoBehaviour
         }
 
        
+    }
+
+    
+    public void LoadXieTongJieShao()
+    {
+      XieTongJieShao = new List<CompanyInfo>();
+
+       string path1 = Application.streamingAssetsPath + "/中信协同/分会介绍";
+
+        XieTongJieShao.Add(LoadCompanyIntroductionPic(path1));
+
+      
     }
     /// <summary>
     /// 加载私享传家2.0版本新增的
@@ -739,9 +758,9 @@ public class PictureHandle : MonoBehaviour
 
     }
 
-    public List<CompanyInfo> CompanyAllTexList { get; set; }
+   
 
-    public List<CompanyInfo> PrivateHeirsAllTexList;
+    
 
     /// <summary>
     /// 导入公司介绍图片

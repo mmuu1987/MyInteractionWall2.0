@@ -37,7 +37,7 @@ public class SiXiangChuanJiaHuoDong : MonoBehaviour
 
     private Vector2 _gripSize = Vector2.one;
 
-    
+    public bool IsEnableMove = true;
 
     // Start is called before the first frame update
     void Start()
@@ -107,7 +107,7 @@ public class SiXiangChuanJiaHuoDong : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!_isDrag)
+        if (!_isDrag && IsEnableMove)
         {
             _touchEvent_DragMoveEvent(-0.35f);
         }

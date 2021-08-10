@@ -68,8 +68,8 @@ public class PictureHandle : MonoBehaviour
 
     public List<string> YingSheGUanList= new List<string>();
 
-    public float WidthEditor = 128;
-    public float HeightEditor = 128;
+    public float WidthEditor = 2048;
+    public float HeightEditor = 2048;
 
     //public List<Texture2D> Texs = new List<Texture2D>();
 

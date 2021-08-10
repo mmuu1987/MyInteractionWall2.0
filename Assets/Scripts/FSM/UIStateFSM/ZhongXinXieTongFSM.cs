@@ -183,16 +183,14 @@ public class ZhongXinXieTongFSM : UIStateFSM
 
         //AddVideoTex(FenHuiJieShaoTexs, PictureHandle.Instance.CompanyAllTexList[0].VideoInfo);
         //AddVideoTex(XieTongFengCaiTexs, PictureHandle.Instance.CompanyAllTexList[1].VideoInfo);
-
+       
 
         FenHuiJieShao.onClick.AddListener((() =>
         {
             SetBtn(FenHuiJieShaoTexs);
             SetHighlight(FenHuiJieShao.transform);
 
-            _nextTouch.gameObject.SetActive(true);
-            _previousTouch.gameObject.SetActive(true);
-
+          
             _numberText.gameObject.SetActive(true);
 
             ShowImage.gameObject.SetActive(true);
@@ -281,17 +279,27 @@ public class ZhongXinXieTongFSM : UIStateFSM
         //_xieTongWeiHuoDong = go.transform.Find("XieTongWeiHuoDong").GetComponent<XieTongWeiHuoDong>();
         //_xieTongWeiHuoDong.Init();
 
+        go.transform.Find("XieTongWeiHuoDong/goBack").GetComponent<Button>().onClick.AddListener((() =>
+        {
+            RectTransform rt = zhongXinXieTongHuoDong.transform.parent.GetComponent<RectTransform>();
+
+            
+             rt.DOAnchorPos(new Vector2(-2004f, -300f), 0.35f);
+           
+
+        }));
+
         go.transform.Find("leftBtn").GetComponent<Button>().onClick.AddListener((() =>
         {
             RectTransform rt = zhongXinXieTongHuoDong.transform.parent.GetComponent<RectTransform>();
 
             if (rt.anchoredPosition.x <= -4840f)
             {
-                rt.DOAnchorPos(new Vector2(-2004f, 0f), 0.35f);
+                rt.DOAnchorPos(new Vector2(-2004f, -300f), 0.35f);
             }
             else
             {
-                rt.DOAnchorPos(new Vector2(-5270f, 0f), 0.35f);
+                rt.DOAnchorPos(new Vector2(-5270f, -300f), 0.35f);
             }
            
         }));
@@ -517,6 +525,7 @@ public class ZhongXinXieTongFSM : UIStateFSM
         _curTex = FenHuiJieShaoTexs;
         FenHuiJieShao.onClick.Invoke();
         Parent.parent.gameObject.SetActive(true);//父级别也要显示
+        SetBtn(FenHuiJieShaoTexs);
 
     }
 

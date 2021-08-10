@@ -84,6 +84,7 @@ public class SiXiangChuanJiaShowPicture : MonoBehaviour
     public void CloseInfo()
     {
         _rectTransform.DOScale(Vector3.zero, 0.35f);
+        _curYearsEvent = null;
     }
     private void SetInfo()
     {
@@ -119,9 +120,10 @@ public class SiXiangChuanJiaShowPicture : MonoBehaviour
         }
 
 
-
+        int n = 0;
         foreach (Texture2D texture2D in _curYearsEvent.TexList)
         {
+            n++;
             RawImage rawImage = Instantiate(ImageIemPrefab, Parent).transform.Find("Content").GetComponent<RawImage>();
 
             rawImage.texture = texture2D;
@@ -133,7 +135,7 @@ public class SiXiangChuanJiaShowPicture : MonoBehaviour
 
             _curRawImages.Add(rawImage);
 
-            rawImage.transform.Find("Text").gameObject.SetActive(false);
+            rawImage.transform.Find("Text").GetComponent<Text>().text = "第"+n+"/"+_curYearsEvent.TexList.Count+"页";
 
             rawImage.rectTransform.parent.GetComponent<Button>().onClick.AddListener((() =>
             {

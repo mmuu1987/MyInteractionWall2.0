@@ -373,7 +373,10 @@ public class LogoItem : MonoBehaviour,IPointerClickHandler,IPointerDownHandler,I
     public void Scale(float dis)
     {
         if (_tween != null) return;
+        if (_isEnableDrag) return;
         bool isScale = false;
+
+       
         if (_isLeft)
         {
             if (-dis <= RectTransform.anchoredPosition.x)
@@ -388,6 +391,8 @@ public class LogoItem : MonoBehaviour,IPointerClickHandler,IPointerDownHandler,I
                 isScale = true;
             }
         }
+
+       
 
         if (isScale)
         {

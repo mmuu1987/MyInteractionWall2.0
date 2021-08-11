@@ -74,7 +74,7 @@ public class DaShiJianFSM : UIStateFSM
 
         if (!_isDrag)
         {
-            _touchEvent_DragMoveEvent(-1f);
+            _touchEvent_DragMoveEvent(-2f);
         }
     }
 

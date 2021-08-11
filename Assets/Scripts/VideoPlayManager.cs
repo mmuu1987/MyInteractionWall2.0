@@ -43,12 +43,14 @@ public class VideoPlayManager : MonoBehaviour
         BigSliderLeft.onValueChanged.AddListener((arg0 =>
         {
             AudioSource.volume = arg0;
+            BigSliderRight.value = arg0;
         }));
 
 
         BigSliderRight.onValueChanged.AddListener((arg0 =>
         {
             AudioSource.volume = arg0;
+            BigSliderLeft.value = arg0;
         }));
 
         FullScaleButtonLeft.onClick.AddListener((() =>

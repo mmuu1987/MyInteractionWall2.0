@@ -232,7 +232,8 @@ public class ZhongXinXieTongFSM : UIStateFSM
             Material mat = Object.Instantiate(_material);
             image.name = "LogoLeft" + n;
             image.SetInfo(-2f, true, pos, ye, mat);
-           
+
+            image.ClickEvent += ItemClick;
 
             n++;
             if (n >= PictureHandle.Instance.FrontLogos.Count)
@@ -258,8 +259,8 @@ public class ZhongXinXieTongFSM : UIStateFSM
             Material mat = Object.Instantiate(_material);
             image.name = "LogoRight" + n;
             image.SetInfo(-2f, false, pos, ye, mat);
-           
 
+            image.ClickEvent += ItemClick;
             n++;
             if (n >= PictureHandle.Instance.BackLogos.Count)
             {
@@ -327,7 +328,14 @@ public class ZhongXinXieTongFSM : UIStateFSM
 
     }
 
-
+    /// <summary>
+    /// Item点击的事件
+    /// </summary>
+    private void ItemClick()
+    {
+        if (_scaleCoroutine != null) Target.StopCoroutine(_scaleCoroutine);
+        _scaleCoroutine = Target.StartCoroutine(Scale(10f));
+    }
     /// <summary>
     /// 设置高亮
     /// </summary>
@@ -450,14 +458,14 @@ public class ZhongXinXieTongFSM : UIStateFSM
     private float _durDis = 0f;
     private Coroutine _scaleCoroutine;
     private Tween _figure;
-    private IEnumerator Scale()
+    private IEnumerator Scale(float time)
     {
         while (true)
         {
-            yield return new WaitForSeconds(6f);
+            yield return new WaitForSeconds(time);
 
             _durDis = 0f;
-            _figure= DOTween.To(() => _durDis, x => _durDis = x, 3840f, 1f).SetEase(Ease.InOutQuad).OnComplete(() =>
+            _figure= DOTween.To(() => _durDis, x => _durDis = x, 3840f*2, 1.3f).SetEase(Ease.InOutQuad).OnComplete(() =>
             {
                 _figure = null;
             });
@@ -496,7 +504,7 @@ public class ZhongXinXieTongFSM : UIStateFSM
     {
         base.Enter();
         if(_scaleCoroutine!=null) Target.StopCoroutine(_scaleCoroutine);
-       _scaleCoroutine = Target.StartCoroutine(Scale());
+       _scaleCoroutine = Target.StartCoroutine(Scale(6f));
         foreach (LogoItem logo in _frontItems)
         {
             logo.gameObject.SetActive(true);

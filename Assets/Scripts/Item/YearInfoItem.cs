@@ -40,7 +40,7 @@ public class YearInfoItem : MonoBehaviour
     /// 设置年代信息，true为设置成功，false为失败，失败原因可能是介绍字数太多
     /// </summary>
     /// <returns></returns>
-    public float SetInfo(YearsEvent info)
+    public float SetInfo(YearsEvent info,bool isUp=true)
     {
         _yearsEvent = info;
 
@@ -72,7 +72,12 @@ public class YearInfoItem : MonoBehaviour
 
 
             this.GetComponent<RectTransform>().sizeDelta = new Vector2(size.x, _tempHeight);
-            this.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, _tempHeight-1164f);
+            if(isUp)
+             this.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, _tempHeight-1164f);
+            else
+            {
+                this.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, -96);
+            }
 
             RawImage.gameObject.SetActive(false);
         }

@@ -31,6 +31,9 @@ public class GridItem : MonoBehaviour
         int fontCount = 50;//字体个数
 
         float tempHeight = -1f;
+
+        //一个格子是否装了两个
+        bool isTwo = false;
         //每个grid设置两个年份，如果第一个年份太大就不设置第二个年份
 
         if (PictureHandle.Instance.YearsEvents.Count >= 2)
@@ -46,7 +49,7 @@ public class GridItem : MonoBehaviour
                 PictureHandle.Instance.YearsEvents.Remove(ye1);
 
                 
-                 tempHeight=item.SetInfo(ye1);
+                 tempHeight=item.SetInfo(ye1, isUp);
                 
             }
             else if (ye1.Describe.Length <= fontCount && ye2.Describe.Length <= fontCount && ye1.PicturesPath.Count <= 0 && ye2.PicturesPath.Count <= 0)//第一，第二个年份都只有文字描述
@@ -60,12 +63,14 @@ public class GridItem : MonoBehaviour
                 item1.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, -200f);
                 item2.SetInfo(ye2);
                 item2.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, -680f);
+
+                isTwo = true;
             }
             else if (ye1.Describe.Length <= fontCount && ye2.Describe.Length >= fontCount || ye2.PicturesPath.Count>0)//第一个年份文字不长，但是第二个文字描述长或者第二个有图片
             {
                 PictureHandle.Instance.YearsEvents.Remove(ye1);
                 YearInfoItem item = Instantiate(YearEventGameObject, this.transform).GetComponent<YearInfoItem>();
-                tempHeight= item.SetInfo(ye1);
+                tempHeight= item.SetInfo(ye1,isUp);
                
             }
             else
@@ -80,7 +85,7 @@ public class GridItem : MonoBehaviour
             PictureHandle.Instance.YearsEvents.Remove(ye1);
             YearInfoItem item = Instantiate(YearEventGameObject, this.transform).GetComponent<YearInfoItem>();
             item.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, -200f);
-            item.SetInfo(ye1);
+            tempHeight = item.SetInfo(ye1, isUp);
         }
         else
         {
@@ -104,6 +109,9 @@ public class GridItem : MonoBehaviour
             RedVerticalImage.rectTransform.pivot = new Vector2(0f,1f);
             RedVerticalImage.rectTransform.anchoredPosition = new Vector2(0f, 0f);
            
+            if(!isTwo)
+                RedVerticalImage.rectTransform.sizeDelta = new Vector2(10f, tempHeight+100f);
+
             CircleImage.rectTransform.anchoredPosition = new Vector2(0f, 1164f);
         }
         else

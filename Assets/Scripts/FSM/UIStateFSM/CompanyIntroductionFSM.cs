@@ -255,7 +255,7 @@ public class CompanyIntroductionFSM : UIStateFSM
                 rt.anchoredPosition = new Vector2(endXUp, 0f);
 
             }
-            else if (i % 2 != 0)
+            else if (i % 2 != 0)//在下面的
             {
                 rt = gi.SetInfo(false);
 

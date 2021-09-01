@@ -11,6 +11,9 @@ using Random = UnityEngine.Random;
 public class LogoItem : MonoBehaviour,IPointerClickHandler,IPointerDownHandler,IPointerUpHandler,IDragHandler
 {
 
+
+    public event Action ClickEvent;
+
     private float _moveSpeed = 0f;
 
     /// <summary>
@@ -155,7 +158,10 @@ public class LogoItem : MonoBehaviour,IPointerClickHandler,IPointerDownHandler,I
             _coroutine= StartCoroutine(Revert());
             //显示信息
         }
+
        
+
+
     }
 
     public void OnPointerDown(PointerEventData eventData)
@@ -165,6 +171,8 @@ public class LogoItem : MonoBehaviour,IPointerClickHandler,IPointerDownHandler,I
        // if (eventData.pointerCurrentRaycast.gameObject != this.gameObject) return;
         _touchMoveTemp = 0;
         _isPress = true;
+
+        if (ClickEvent != null) ClickEvent();
     }
 
     

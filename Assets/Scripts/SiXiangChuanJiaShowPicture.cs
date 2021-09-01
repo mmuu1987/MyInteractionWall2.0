@@ -135,7 +135,7 @@ public class SiXiangChuanJiaShowPicture : MonoBehaviour
 
             _curRawImages.Add(rawImage);
 
-            rawImage.transform.Find("Text").GetComponent<Text>().text = "第"+n+"/"+_curYearsEvent.TexList.Count+"页";
+            rawImage.transform.Find("Text").GetComponent<Text>().text = n+"/"+_curYearsEvent.TexList.Count;
 
             rawImage.rectTransform.parent.GetComponent<Button>().onClick.AddListener((() =>
             {

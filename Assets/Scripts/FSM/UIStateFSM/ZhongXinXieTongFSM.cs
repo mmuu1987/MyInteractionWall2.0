@@ -320,7 +320,7 @@ public class ZhongXinXieTongFSM : UIStateFSM
         go.transform.Find("XieTongWeiHuoDong/goBack").GetComponent<Button>().onClick.AddListener((() =>
         {
             RectTransform rt = zhongXinXieTongHuoDong.transform.parent.GetComponent<RectTransform>();
-            rt.DOAnchorPos(new Vector2(-5270f, 0f), 0.35f);
+            rt.DOAnchorPos(new Vector2(-5270f, -300f), 0.35f);
 
         }));
 
@@ -515,9 +515,9 @@ public class ZhongXinXieTongFSM : UIStateFSM
         }
 
         _touchEvent.TouchMoveEvent += TouchMoveEvent;
-        _previous = Target.transform.Find("ZhongXinXieTongFSM/Previous");
+        _previous = Target.transform.Find("ZhongXinXieTongFSM/XieTongWeiHuoDong/Previous");
 
-        _next = Target.transform.Find("ZhongXinXieTongFSM/Next");
+        _next = Target.transform.Find("ZhongXinXieTongFSM/XieTongWeiHuoDong/Next");
 
         _previousTouch = Target.transform.Find("ZhongXinXieTongFSM/XieTongWeiHuoDong/TouchPrevious");
 

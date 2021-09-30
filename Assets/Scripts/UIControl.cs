@@ -228,7 +228,7 @@ public class UIControl : MonoBehaviour
         }
         else//关闭荣誉墙
         {
-            HonorWall.DOLocalMoveX(-7680, 0.5f).SetEase(Ease.InOutQuad);
+            HonorWall.DOLocalMoveX(-7765, 0.5f).SetEase(Ease.InOutQuad);
          
             HonorWallBtn.transform.Find("Image").GetComponent<Image>().sprite = HonorWallBtnRight;
 

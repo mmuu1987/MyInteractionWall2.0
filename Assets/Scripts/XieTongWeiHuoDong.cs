@@ -53,9 +53,9 @@ public class XieTongWeiHuoDong : MonoBehaviour
 
         ShowRawImageParent.rectTransform.DOScale(Vector3.zero, 0f);
 
-        PreviouseBtn.onClick.AddListener((Previous));
+       // PreviouseBtn.onClick.AddListener((Previous));
 
-        NextBtn.onClick.AddListener((Next));
+       // NextBtn.onClick.AddListener((Next));
 
       
     }

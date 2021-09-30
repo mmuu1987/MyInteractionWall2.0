@@ -109,7 +109,7 @@ public class SiXiangChuanJiaHuoDong : MonoBehaviour
     {
         if (!_isDrag && IsEnableMove)
         {
-            _touchEvent_DragMoveEvent(-0.35f);
+            _touchEvent_DragMoveEvent(-0.95f);
         }
     }
     public void Init(List<YearsEvent> yearsEvents)

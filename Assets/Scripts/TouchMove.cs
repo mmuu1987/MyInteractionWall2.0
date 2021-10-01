@@ -33,17 +33,20 @@ public class TouchMove : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
         _rectTransform.anchoredPosition = new Vector2(_rectTransform.anchoredPosition.x + eventData.delta.x, _rectTransform.anchoredPosition.y);
     }
 
+    public float RightOffset = -750f;
+
+    public float LeftOffest = -250f;
     public void OnEndDrag(PointerEventData eventData)
     {
         float x = _rectTransform.anchoredPosition.x + eventData.delta.x;
 
         if (x > MaxRight)
         {
-            _rectTransform.DOAnchorPosX(MaxRight, 0.5f);
+            _rectTransform.DOAnchorPosX(MaxRight+ RightOffset, 0.5f);
         }
         else if(x<-MaxLeft)
         {
-            _rectTransform.DOAnchorPosX(-MaxLeft, 0.5f);
+            _rectTransform.DOAnchorPosX(-MaxLeft + LeftOffest, 0.5f);
         }
         else
         {

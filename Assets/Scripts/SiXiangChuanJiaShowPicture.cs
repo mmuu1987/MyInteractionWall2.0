@@ -107,7 +107,13 @@ public class SiXiangChuanJiaShowPicture : MonoBehaviour
 
             TitleText.text = _descDic["活动"];
 
-            Description.text = _descDic["简述"]; 
+           
+
+            string strTmp = _descDic["简述"];
+
+            strTmp = strTmp.Replace(" ", "\u00A0");
+
+            Description.text = strTmp;
 
         }
         catch (Exception e)
@@ -135,7 +141,9 @@ public class SiXiangChuanJiaShowPicture : MonoBehaviour
 
             _curRawImages.Add(rawImage);
 
-            rawImage.transform.Find("Text").GetComponent<Text>().text = n+"/"+_curYearsEvent.TexList.Count;
+            //rawImage.transform.Find("Text").GetComponent<Text>().text = n+"/"+_curYearsEvent.TexList.Count;
+
+            rawImage.transform.Find("Text").gameObject.SetActive(false);
 
             rawImage.rectTransform.parent.GetComponent<Button>().onClick.AddListener((() =>
             {

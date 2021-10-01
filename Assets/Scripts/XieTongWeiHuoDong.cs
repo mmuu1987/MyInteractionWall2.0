@@ -139,7 +139,7 @@ public class XieTongWeiHuoDong : MonoBehaviour
         {
             TitleText.text = "格式不正确";
 
-            Description.text = "格式不正确，请检查txt文档格式是否正确";
+            Description.text = "格式不正确，请检查txt文档格式是否正确，描述文字不允许有回车换行";
 
             Debug.LogError(e.ToString());
         }

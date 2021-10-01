@@ -200,6 +200,11 @@ public class Setting
     /// </summary>
     public string OsThree;
 
+    /// <summary>
+    /// 中信协同logo的传动时间
+    /// </summary>
+    public float DurTime = 0.35f;
+
 
     public Setting()
     {
@@ -226,7 +231,10 @@ public class Setting
         OsTwo ="/卓越风采/2020年MDRT达标榜";
         OsThree =  "/卓越风采/双百万储备力量";
 
-    
+        DurTime = 0.35f;
+
+
+
     }
 
 

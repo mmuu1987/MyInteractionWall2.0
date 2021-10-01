@@ -462,6 +462,8 @@ public class ZhongXinXieTongFSM : UIStateFSM
     {
         while (true)
         {
+
+
             yield return new WaitForSeconds(time);
 
             _durDis = 0f;

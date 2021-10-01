@@ -5,7 +5,9 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 
-
+/// <summary>
+/// 滑动位置，预览该位置的视频定帧
+/// </summary>
 public class MySlider : Slider
 {
 
@@ -22,17 +24,7 @@ public class MySlider : Slider
         base.Awake();
         _waitForSeconds=new WaitForSeconds(0.2f);
     }
-    public override void OnDrag(PointerEventData eventData)
-    {
-        base.OnDrag(eventData);
-
-        if (_isDrag) return;
-        if (OnChangeValue != null)
-            OnChangeValue(this.value,_isDrag);
-
-
-    }
-
+    
     public override void OnPointerDown(PointerEventData eventData)
     {
         base.OnPointerUp(eventData);
@@ -46,14 +38,10 @@ public class MySlider : Slider
 
         base.OnPointerUp(eventData);
         _isDrag = false;
+        if (_coroutine != null) StopCoroutine(_coroutine);
+        _coroutine = null;
         if (OnChangeValue != null)
             OnChangeValue(this.value, _isDrag);
-
-        if(_coroutine!=null)StopCoroutine(_coroutine);
-        _coroutine = null;
-
-
-
     }
    
     public void SetValue(float newValue)

@@ -59,6 +59,7 @@ public class VideoPlayManager : MonoBehaviour
             this._rectTransform.DOSizeDelta(new Vector2(7680f, 3240f), 0.55f);
             SliderSmall.gameObject.SetActive(false);
             FullScaleButtonLeft.gameObject.SetActive(false);
+            this.transform.Find("VideoSlider").gameObject.SetActive(false);
             BigSliderRight.transform.parent.gameObject.SetActive(true);
             BigSliderLeft.transform.parent.gameObject.SetActive(true);
            
@@ -73,6 +74,7 @@ public class VideoPlayManager : MonoBehaviour
             this._rectTransform.DOSizeDelta(new Vector2(1920, 1080f), 0.55f);
             SliderSmall.gameObject.SetActive(true);
             FullScaleButtonLeft.gameObject.SetActive(true);
+            this.transform.Find("VideoSlider").gameObject.SetActive(true);
             BigSliderLeft.transform.parent.gameObject.SetActive(false);
             BigSliderRight.transform.parent.gameObject.SetActive(false);
 
@@ -84,6 +86,7 @@ public class VideoPlayManager : MonoBehaviour
             this._rectTransform.DOSizeDelta(new Vector2(1920, 1080f), 0.55f);
             SliderSmall.gameObject.SetActive(true);
             FullScaleButtonLeft.gameObject.SetActive(true);
+            this.transform.Find("VideoSlider").gameObject.SetActive(true);
             BigSliderLeft.transform.parent.gameObject.SetActive(false);
             BigSliderRight.transform.parent.gameObject.SetActive(false);
 

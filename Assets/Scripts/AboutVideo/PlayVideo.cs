@@ -47,7 +47,7 @@ public class PlayVideo : MonoBehaviour
        
 
         videoTimeSlider.OnChangeValue += OnChangeValue;
-
+        videoPlayer.sendFrameReadyEvents = true;
         videoPlayer.frameReady += VideoPlayer_frameReady;
     }
 
@@ -123,7 +123,7 @@ public class PlayVideo : MonoBehaviour
         //videoTimeText.text = string.Format("{0:D2}:{1:D2}:{2:D2} / {3:D2}:{4:D2}:{5:D2}", currentHour, currentMinute, currentSecond, clipHour, clipMinute, clipSecond);
 
         // 把当前视频播放的时间比例赋值到 Slider 上
-        if ( !_isDrag)
+        if (_isRead &&_isDrag)
         {
            
             videoTimeSlider.SetValue((float)(videoPlayer.time / videoPlayer.length));

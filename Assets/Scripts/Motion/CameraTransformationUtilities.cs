@@ -14,16 +14,7 @@ public class CameraTransformationUtilities : MonoBehaviour
 
     /// <param name="projectionMatrix">投影矩阵</param>
     /// <param name="viewMatrix">视点矩阵</param>
-    /// <param name="projection">列表形式的投影矩阵</param>
-    /// <param name="view">列表形式的视点矩阵</param>
     /// <param name="p">要投影的点的引用</param>
-    /// <param name="pl">要投影的点引用列表</param>
-    /// <param name="width">屏幕宽</param>
-    /// <param name="height">屏幕高</param>
-    /// <param name="rowBase">列表是否以行优先进行矩阵元素的存储</param>
-    /// <param name="flipLeftToRight">水平翻转</param>
-    /// <param name="flipUpsideDown">上下翻转</param>
-
     public void UnprojectScreenToWorld(
         Matrix4x4 projectionMatrix,
         Matrix4x4 viewMatrix,

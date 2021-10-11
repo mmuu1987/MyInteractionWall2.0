@@ -51,12 +51,13 @@ public class PlayVideo : MonoBehaviour
         videoPlayer.frameReady += VideoPlayer_frameReady;
     }
 
-    private bool _isRead = false;
+    private bool _isRead = true;
 
     private bool _isDrag = false;
     private void VideoPlayer_frameReady(VideoPlayer source, long frameIdx)
     {
         _isRead = true;
+       // Debug.Log("ready");
     }
 
 
@@ -74,8 +75,8 @@ public class PlayVideo : MonoBehaviour
             if (Math.Abs(oldVal - value) < 0.055f) return;
         }
       
-        videoPlayer.time = value * (float)videoPlayer.length;
-
+         videoPlayer.time = value * (float)videoPlayer.length;
+       // videoPlayer.frame = (long)(value * videoPlayer.frameCount);
         //以下两种方法可二选一
 
         //滑动的时候定帧
@@ -123,7 +124,7 @@ public class PlayVideo : MonoBehaviour
         //videoTimeText.text = string.Format("{0:D2}:{1:D2}:{2:D2} / {3:D2}:{4:D2}:{5:D2}", currentHour, currentMinute, currentSecond, clipHour, clipMinute, clipSecond);
 
         // 把当前视频播放的时间比例赋值到 Slider 上
-        if (_isRead &&_isDrag)
+        if (_isRead &&!_isDrag)
         {
            
             videoTimeSlider.SetValue((float)(videoPlayer.time / videoPlayer.length));

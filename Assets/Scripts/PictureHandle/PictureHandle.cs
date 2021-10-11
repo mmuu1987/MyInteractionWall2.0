@@ -652,6 +652,7 @@ public class PictureHandle : MonoBehaviour
 
                 string str = Encoding.UTF8.GetString(bytes);
 
+                str= str.Replace(" ", "\u00A0");
                 yearsEvent.Describe = str;
             }
             else if (fileInfo.Extension == ".jpg" || fileInfo.Extension == ".JPG" || fileInfo.Extension == ".jpeg")

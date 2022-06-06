@@ -648,11 +648,21 @@ public class PictureHandle : MonoBehaviour
 
                 yearsEvent.DescribePath = fileInfo.FullName;
 
-                byte[] bytes = File.ReadAllBytes(fileInfo.FullName);
+               // byte[] bytes = File.ReadAllBytes(fileInfo.FullName);
 
-                string str = Encoding.UTF8.GetString(bytes);
+                //以UTF-8带BOM格式读取文件内容
+                Encoding end = new UTF8Encoding(true);
+                string str = string.Empty;
+                using (StreamReader sr = new StreamReader(fileInfo.FullName, end))
+                {
+                    str = sr.ReadToEnd();
+                }
+
+                
 
                 str= str.Replace(" ", "\u00A0");
+
+
                 yearsEvent.Describe = str;
             }
             else if (fileInfo.Extension == ".jpg" || fileInfo.Extension == ".JPG" || fileInfo.Extension == ".jpeg")
